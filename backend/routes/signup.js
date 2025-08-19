@@ -1,0 +1,95 @@
+const express = require('express');
+const router = express.Router();
+const zod = require('zod');
+const {User} = require("../models/usersSchema");
+const {auth} = require("../middleWare/auth");
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET;
+const argon2 = require("argon2");
+
+
+const signupSchema = zod.object({
+    username: zod.string().email().refine(email => email.endsWith("@chitkarauniversity.edu.in"), {
+        message: "Email must be a Chitkara University email"
+    }),    firstName: zod.string(),
+    lastName: zod.string(),
+    password: zod.string(),
+    role: zod.string(),
+    description: zod.string()
+})
+
+router.post("/signup", async(req,res)=>{
+    const { success } = signupSchema.safeParse(req.body);
+    if(!success){
+        return res.status(411).json({
+            message: "Incorrect Inputs"
+        })
+    }
+    const existingUser = await User.findOne({
+        username: req.body.username
+    })
+    if(existingUser){
+        return res.status(411).json({
+            message: "User already exist"
+        })
+    }
+
+    const hashedPassword = await argon2.hash(req.body.password);
+
+const user= await User.create({
+    username: req.body.username,
+    password: hashedPassword,
+    firstName: req.body.firstName,
+    lastName: req.body.lastname,
+    role: req.body.role,
+    description: req.body.description,
+});
+
+res.status(201).json({message: "Signup Successful", user })
+});
+
+const signinSchema = zod.object({
+    username: zod.string().email(),
+    password: zod.string()
+})
+
+router.post("/signin",async(req,res)=>{
+    const { success } = signinSchema.safeParse(req.body);
+    if(!success){
+        return res.status(411).json({
+            message: "Incorrect inputs"
+        })
+    }
+
+    const user = await User.findOne({
+        username: req.body.username,
+    });
+
+    if(!user){
+        return res.status(411).json({
+            message: "User not found"
+        });
+    }
+
+    const passwordMatch = await argon2.verify(user.password, req.body.password);
+    if(!passwordMatch){
+        return res.status(401).json({
+            message: "Invalid Credentials"
+        });
+    }
+
+    
+        const token = jwt.sign({
+            userId: user._id,
+            role: user.role,
+        },JWT_SECRET, { expiresIn: "1h" });
+
+    res.cookie('token', token, { httpOnly: true, secure: true });
+
+        res.json({
+            message: "Signin Successfully",
+        });
+    });
+
+
+module.export = router;
