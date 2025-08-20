@@ -53,13 +53,17 @@ const eventSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-eventSchema.pre("save", async function(next) {
-    if(this.isNew){
-        const lastEvent = await Event.findOne().sort({eventNumber: -1});
-        this.totalEvent = lastEvent ? lastEvent.totalEvent + 1 : 1;
+eventSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    try {
+      const total = await Event.countDocuments();
+      this.totalEvent = total + 1;
+    } catch (err) {
+      return next(err);
     }
-    next();
-})
+  }
+  next();
+});
 
 const Event = mongoose.model('Event',eventSchema);
 module.exports = Event;
