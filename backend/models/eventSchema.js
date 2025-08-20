@@ -5,7 +5,7 @@ const  MONGO_URI  = process.env.MONGO_URI;
 mongoose.connect(MONGO_URI);
 
 const eventSchema = new mongoose.Schema({
-    eventNumber: {
+    totalEvent: {
         type: String,
         trim: true,
     },
@@ -51,6 +51,14 @@ const eventSchema = new mongoose.Schema({
     }
 },{
     timestamps: true,
+});
+
+eventSchema.pre("save", async function(next) {
+    if(this.isNew){
+        const lastEvent = await Event.findOne().sort({eventNumber: -1});
+        this.totalEvent = lastEvent ? lastEvent.totalEvent + 1 : 1;
+    }
+    next();
 })
 
 const Event = mongoose.model('Event',eventSchema);

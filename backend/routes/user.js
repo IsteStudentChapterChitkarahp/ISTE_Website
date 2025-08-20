@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const zod = require('zod');
-const {User} = require("../models/usersSchema");
-const {auth} = require("../middleWare/auth");
+const User = require("../models/usersSchema");
+const auth = require("../middleWare/auth");
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 const argon2 = require("argon2");
@@ -11,14 +11,16 @@ const argon2 = require("argon2");
 const signupSchema = zod.object({
     username: zod.string().email().refine(email => email.endsWith("@chitkarauniversity.edu.in"), {
         message: "Email must be a Chitkara University email"
-    }),    firstName: zod.string(),
+    }), 
+    firstName: zod.string(),
     lastName: zod.string(),
     password: zod.string(),
     role: zod.string(),
     description: zod.string()
 })
 
-router.post("/signup", async(req,res)=>{
+router.post("/user/signup", async(req,res)=>{
+    try{
     const { success } = signupSchema.safeParse(req.body);
     if(!success){
         return res.status(411).json({
@@ -46,6 +48,10 @@ const user= await User.create({
 });
 
 res.status(201).json({message: "Signup Successful", user })
+
+} catch(err){
+        console.log("error", err.message);
+    }
 });
 
 const signinSchema = zod.object({
@@ -53,8 +59,9 @@ const signinSchema = zod.object({
     password: zod.string()
 })
 
-router.post("/signin",async(req,res)=>{
-    const { success } = signinSchema.safeParse(req.body);
+router.post("/user/signin",async(req,res)=>{
+    try{
+        const { success } = signinSchema.safeParse(req.body);
     if(!success){
         return res.status(411).json({
             message: "Incorrect inputs"
@@ -85,11 +92,14 @@ router.post("/signin",async(req,res)=>{
         },JWT_SECRET, { expiresIn: "1h" });
 
     res.cookie('token', token, { httpOnly: true, secure: true });
-
         res.json({
             message: "Signin Successfully",
         });
+    } catch(err){
+        console.log("error",err);
+        res.status(400).json({message: "Error in Sigin"});
+    }
     });
 
 
-module.export = router;
+module.exports = router;

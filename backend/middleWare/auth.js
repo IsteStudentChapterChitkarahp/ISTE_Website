@@ -9,9 +9,8 @@ const userAuth = async(req,res,next) => {
         }
         
         const decodedObj = await jwt.verify(token, process.env.JWT_SECRET);
-        const { _id } = decodedObj;
-
-        const user = await User.findById(_id);
+        const { userId} = decodedObj;
+        const user = await User.findById(userId).select("-password");;
         if(!user){
             throw new Error("User not found");
         }
@@ -22,4 +21,4 @@ const userAuth = async(req,res,next) => {
     }
 };
 
-model.exports = userAuth
+module.exports = userAuth
