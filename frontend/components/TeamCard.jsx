@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../utils/UserContext';
 
-const EventCard = ({eventDetails}) => {
-    const { name,photoUrl, description, status, venue, eventDate, createdBy } = eventDetails;
+const TeamCard = ({teamDetails}) => {
+    const { firstName,photoUrl,role, username, description } = teamDetails;
   const { auth } = useContext(UserContext);
-       
+        
     return (
         <div style={{
             border: '1px solid #ddd',
@@ -15,19 +15,19 @@ const EventCard = ({eventDetails}) => {
         }}>
 <img 
     src={photoUrl ? photoUrl : "https://play-lh.googleusercontent.com/PhgyB8JGhS6Dl4WI4z6R2nEBUlWoLV7Yk-VHhLiEI5XAfRWmXu5Y2TogfRd8UxC9oPA"} 
-    alt={name} 
+    alt={firstName} 
     style={{ width: '100%', borderRadius: '8px', marginBottom: '8px' }} 
 />
-            <h3>Event: {name}</h3>
-            <p>Venue: {venue}</p>
-            <p>Date: {new Date(eventDate).toLocaleString()}</p>
-            <p>Status: {status}</p>
-            <p>Description: {description}</p>
+            <h3> {firstName}</h3>
+            <p>{role}</p>
+            <p>{description}</p>
 {        auth ? 
-(<p>Updated By: {createdBy?.firstName ?? "Unknown"}- {createdBy?.role ?? "Unknown"}</p>
+(<p>Email-Id: {username}</p>
 ) : null
-}        </div>
+}
+
+      </div>
     );
 };
 
-export default EventCard
+export default TeamCard

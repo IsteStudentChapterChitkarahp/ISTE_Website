@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import EventCard from './EventCard';
 
 const Events = () => {
     const [events, setEvents] = useState([]);
+    
+useEffect(()=>{
+fetch("http://localhost:5000/events")
+    .then(fetchedEvents => fetchedEvents.json())
+    .then((res) => {
+        setEvents(res);
+        console.log(res);
+})
+    .catch(error => console.error("Error fetching events:", error));
 
-    const fetchedEvents = fetch("https://localhost:3000")
+},[])
+    
     return (
         <div>
-            <h2>Events</h2>
-            <p>Welcome to the Events page!</p>
+            {
+            events.map((e)=>(
+                <EventCard key={e._id} eventDetails={e}/>
+            ))
+            }
         </div>
     );
 };

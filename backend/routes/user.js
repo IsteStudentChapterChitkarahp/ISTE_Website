@@ -19,6 +19,11 @@ const signupSchema = zod.object({
     description: zod.string()
 })
 
+router.get("/user/details", async (req, res) => {
+  const user = await User.find();
+  res.json(user);
+});
+
 router.post("/user/signup", async(req,res)=>{
     try{
     const { success } = signupSchema.safeParse(req.body);
@@ -91,7 +96,7 @@ router.post("/user/signin",async(req,res)=>{
             role: user.role,
         },JWT_SECRET, { expiresIn: "1h" });
 
-    res.cookie('token', token, { httpOnly: true, secure: true });
+    res.cookie('token', token, { httpOnly: true, secure: false });
         res.json({
             message: "Signin Successfully",
         });
