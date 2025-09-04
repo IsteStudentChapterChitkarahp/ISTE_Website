@@ -15,6 +15,15 @@ const eventSchema = zod.object({
     eventDate : zod.preprocess((val) => new Date(val), zod.date())
 });
 
+router.get("/events",async(req,res)=>{
+    try{
+        const eventsData = await Event.find().populate("createdBy", "firstName username role");
+        res.status(200).json(eventData);
+    } catch(err){
+        res.status(404).json({message: "Error error while fetching events detail...."})
+    }
+})
+
 router.post("/user/eventManager",auth, async (req,res)=>{
     try{
             const user = await User.findById(req.user._id).select("role");
