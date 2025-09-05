@@ -1,15 +1,30 @@
+import { useEffect, useState } from "react";
+
 const Marquee = () => {
-  const items = [
-    { id: 1, type: "logo", url: "/images/a.jpg" }, 
-    { id: 2, type: "logo", url: "/images/b.jpg" }, 
-    { id: 3, type: "logo", url: "/images/c.jpg" }, 
-    { id: 4, type: "text", message: "🚀 Welcome new batch 2025!" },
-    { id: 5, type: "text", message: "🎉 Register fast for the upcoming event!" },
-    { id: 6, type: "logo", url: "/images/d.jpg" }, 
-    { id: 7, type: "logo", url: "/images/e.jpg" }, 
-    { id: 8, type: "logo", url: "/images/f.jpg" }, 
-    { id: 9, type: "logo", url: "/images/g.jpg" }, 
-  ];
+  // const items = [
+  //   { id: 1, type: "logo", url: "/images/a.jpg" }, 
+  //   { id: 2, type: "logo", url: "/images/b.jpg" }, 
+  //   { id: 3, type: "logo", url: "/images/c.jpg" }, 
+  //   { id: 4, type: "text", message: "🚀 Welcome new batch 2025!" },
+  //   { id: 5, type: "text", message: "🎉 Register fast for the upcoming event!" },
+  //   { id: 6, type: "logo", url: "/images/d.jpg" }, 
+  //   { id: 7, type: "logo", url: "/images/e.jpg" }, 
+  //   { id: 8, type: "logo", url: "/images/f.jpg" }, 
+  //   { id: 9, type: "logo", url: "/images/g.jpg" }, 
+  // ];
+
+  const [items, setItems] = useState([]);
+
+  useEffect(()=>{
+  fetch("http://localhost:5000/updates")
+      .then((fetchedUpdates)=> fetchedUpdates.json())
+      .then((res) => {
+          setItems(res);
+          console.log(res);
+  })
+      .catch(error => console.error("Error fetching updates:", error));
+  
+  },[])
 
   return (
     <div className="overflow-hidden whitespace-nowrap marquee-container py-6 relative border-y-2 border-white border-opacity-20">

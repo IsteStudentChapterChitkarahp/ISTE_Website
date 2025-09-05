@@ -37,6 +37,19 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    time: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    registrationLink: {
+      type: String,
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("Invalid Registration Link URL: " + value);
+        }
+      },
+    },
     photoUrl: {
         type: String,
         validate(value){

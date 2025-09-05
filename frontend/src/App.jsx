@@ -8,6 +8,10 @@ import EventCard from '../components/EventCard'
 import Events from '../components/Events'
 import { UserProvider } from '../utils/UserContext'
 import Team from '../components/Team'
+import Login from '../components/Login'
+import ChangeUpdate from '../components/ChangeUpdate'
+import EventForm from '../components/AddEvents'
+import UpdateTeam from '../components/UpdateTeam'
 
 
 function App() {
@@ -16,10 +20,14 @@ function App() {
     <div>
       <UserProvider>
       <Navbar/>
-      {/* <Body /> */}
-      {/* <Marquee /> */}
-      {/* <Events /> */}
+      <Body />
+      <Marquee />
+      <Events />
       <Team/>
+      <Login />
+      {/* <ChangeUpdate /> */}
+      {/* <EventForm/> */}
+      <UpdateTeam />
       </UserProvider>
     </div>
   )
