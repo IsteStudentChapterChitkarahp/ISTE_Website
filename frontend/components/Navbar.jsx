@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../utils/UserContext";
 
 const Navbar = () => {
@@ -45,6 +45,40 @@ const Navbar = () => {
     navigate("/login"); 
   };
 
+  // Navigation handlers for admin dropdown
+  const handleAddEvents = () => {
+    navigate("/admin/add-event");
+  };
+
+  const handleChangeUpdates = () => {
+    navigate("/admin/update");
+  };
+
+  const handleUpdateTeam = () => {
+    navigate("/admin/update-team");
+  };
+
+  // Navigation handlers for scrolling to sections on home page
+  const scrollToSection = (sectionId) => {
+    // First navigate to home page if not already there
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      // Already on home page, just scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <div className="navbar bg-base-100/80 backdrop-blur-md fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-black-600/80 to-purple-600/80  shadow-sm h-16">
       <div className="navbar-start">
@@ -66,12 +100,12 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-            <li><a>Add Events</a></li>
-            <li><a>Change Updates</a></li>
-            <li><a>Update About Us</a></li>
-{(role === "Faculty" || role === "Technical Head") && (
-  <li><a>Update Team</a></li>
-)}
+            <li><a onClick={handleAddEvents} className="cursor-pointer">Add Events</a></li>
+            <li><a onClick={handleChangeUpdates} className="cursor-pointer">Change Updates</a></li>
+            <li><a className="cursor-pointer">Update About Us</a></li>
+            {(role === "Faculty" || role === "Technical Head") && (
+              <li><a onClick={handleUpdateTeam} className="cursor-pointer">Update Team</a></li>
+            )}
           </ul>
         </div>
         
@@ -83,22 +117,44 @@ const Navbar = () => {
             alt="ISTE Logo"
             className="w-10 h-10 rounded-full object-cover"
           />
-          <a
+          <Link
+            to="/"
             className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 
                        bg-clip-text text-transparent 
                        hover:from-blue-700 hover:to-purple-700 
                        transition-all duration-300"
           >
             ISTE
-          </a>
+          </Link>
         </div>
       </div>
 
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li><a className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group">Events</a></li>
-          <li><a className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group">Our Team</a></li>
-          <li><a className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group">About</a></li>
+          <li>
+            <a 
+              onClick={() => scrollToSection('events')}
+              className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group cursor-pointer"
+            >
+              Events
+            </a>
+          </li>
+          <li>
+            <a 
+              onClick={() => scrollToSection('team')}
+              className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group cursor-pointer"
+            >
+              Our Team
+            </a>
+          </li>
+          <li>
+            <a 
+              onClick={() => scrollToSection('about')}
+              className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group cursor-pointer"
+            >
+              About
+            </a>
+          </li>
         </ul>
       </div>
 

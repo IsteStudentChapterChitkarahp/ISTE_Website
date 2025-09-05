@@ -1,5 +1,4 @@
-import { useState } from 'react'
-
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import Navbar from '../components/Navbar'
 import Body from '../components/Body'
@@ -13,23 +12,46 @@ import ChangeUpdate from '../components/ChangeUpdate'
 import EventForm from '../components/AddEvents'
 import UpdateTeam from '../components/UpdateTeam'
 
-
-function App() {
-
+// Home page component that includes all main sections
+const HomePage = () => {
   return (
-    <div>
-      <UserProvider>
-      <Navbar/>
+    <>
       <Body />
       <Marquee />
-      <Events />
-      <Team/>
-      <Login />
-      {/* <ChangeUpdate /> */}
-      {/* <EventForm/> */}
-      <UpdateTeam />
-      </UserProvider>
-    </div>
+      <div id="events">
+        <Events />
+      </div>
+      <div id="team">
+        <Team />
+      </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <UserProvider>
+      <div>
+        <Navbar />
+        <Routes>
+          {/* Home page with all main sections */}
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Individual pages */}
+          <Route path="/events" element={<Events />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/login" element={<Login />} />
+          
+          {/* Admin routes */}
+          <Route path="/admin/update" element={<ChangeUpdate />} />
+          <Route path="/admin/add-event" element={<EventForm />} />
+          <Route path="/admin/update-team" element={<UpdateTeam />} />
+          
+          {/* Catch-all route - redirects to home */}
+          <Route path="*" element={<HomePage />} />
+        </Routes>
+      </div>
+    </UserProvider>
   )
 }
 
