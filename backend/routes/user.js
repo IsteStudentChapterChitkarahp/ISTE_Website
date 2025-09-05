@@ -15,6 +15,7 @@ const signupSchema = zod.object({
     firstName: zod.string(),
     lastName: zod.string(),
     password: zod.string(),
+    photoUrl: zod.string().url().optional(),
     role: zod.string(),
     description: zod.string()
 })
@@ -22,6 +23,15 @@ const signupSchema = zod.object({
 router.get("/user/details", async (req, res) => {
   const user = await User.find();
   res.json(user);
+});
+
+router.post("/user/logout", async (req, res) => {
+  try{
+    res.clearCookie("token");
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch(err){
+    res.status(500).json({message: "Logout Failed!"});
+  }
 });
 
 router.post("/user/signup", async(req,res)=>{
@@ -47,7 +57,8 @@ const user= await User.create({
     username: req.body.username,
     password: hashedPassword,
     firstName: req.body.firstName,
-    lastName: req.body.lastname,
+    lastName: req.body.lastName,
+    photoUrl: req.body.photoUrl,
     role: req.body.role,
     description: req.body.description,
 });
