@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, User, Lock, CheckCircle, XCircle } from "lucide-react";
 
 const Login = () => {
@@ -7,7 +8,7 @@ const Login = () => {
     const [message, setMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
+    const navigate = useNavigate();
     useEffect(()=>{
         const timer = setTimeout(() => {
             setMessage("");

@@ -5,12 +5,15 @@ import Body from '../components/Body'
 import Marquee from '../components/Update'
 import EventCard from '../components/EventCard'
 import Events from '../components/Events'
-import { UserProvider } from '../utils/UserContext'
+import EventsPreview from '../components/EventsPreview'
 import Team from '../components/Team'
+import TeamPreview from '../components/TeamPreview' // Import the new preview component
+import { UserProvider } from '../utils/UserContext'
 import Login from '../components/Login'
 import ChangeUpdate from '../components/ChangeUpdate'
 import EventForm from '../components/AddEvents'
 import UpdateTeam from '../components/UpdateTeam'
+import Footer from '../components/Footer'
 
 // Home page component that includes all main sections
 const HomePage = () => {
@@ -18,12 +21,9 @@ const HomePage = () => {
     <>
       <Body />
       <Marquee />
-      <div id="events">
-        <Events />
-      </div>
-      <div id="team">
-        <Team />
-      </div>
+      <EventsPreview />
+      <TeamPreview /> {/* Use TeamPreview instead of Team */}
+      <Footer/>
     </>
   )
 }
