@@ -4,7 +4,7 @@ const Body = () => {
 
       <div className=" inset-0 bg-black bg-opacity-50"></div>
       
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8">
+      <div className="relative z-0 flex flex-col items-center justify-center min-h-screen px-4 py-8">
         <div className="mb-8 transform hover:scale-105 transition-transform duration-300">
           <img 
             src="https://i.ytimg.com/vi/XlrYem8-3fM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA4ZL_oGVx3OZ5QPjfuTf-LPxdvVw" 
