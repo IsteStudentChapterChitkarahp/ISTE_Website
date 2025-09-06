@@ -26,7 +26,10 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black border-t border-gray-800 relative overflow-hidden">
+    <footer 
+ className="relative overflow-hidden border-t border-gray-800 
+             bg-[url('https://betterstack.com/assets/v2/homepage-v3/hero-bg-sm-a7f682621b3ceceb1a711f30165a0feab8f901cdbb1e0b9b41c1729f848ea031.jpg')] 
+             bg-cover bg-top bg-no-repeat "     >
       {/* Decorative Background */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>

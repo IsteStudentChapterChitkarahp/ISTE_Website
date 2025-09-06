@@ -14,6 +14,7 @@ import ChangeUpdate from '../components/ChangeUpdate'
 import EventForm from '../components/AddEvents'
 import UpdateTeam from '../components/UpdateTeam'
 import Footer from '../components/Footer'
+import About from '../components/About'
 
 // Home page component that includes all main sections
 const HomePage = () => {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/team" element={<Team />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
           
           {/* Admin routes */}
           <Route path="/admin/update" element={<ChangeUpdate />} />

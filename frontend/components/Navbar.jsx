@@ -58,30 +58,12 @@ const Navbar = () => {
     navigate("/admin/update-team");
   };
 
-  // Navigation handlers for scrolling to sections on home page
-  const scrollToSection = (sectionId) => {
-    // First navigate to home page if not already there
-    if (window.location.pathname !== '/') {
-      navigate('/');
-      // Wait for navigation to complete, then scroll
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    } else {
-      // Already on home page, just scroll
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
-
   return (
-    <div className="navbar bg-base-100/80 backdrop-blur-md fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-black-600/80 to-purple-600/80  shadow-sm h-16">
-      <div className="navbar-start">
+    <div 
+ className="navbar fixed top-0 left-0 w-full z-50 h-16 
+             bg-[url('https://betterstack.com/assets/v2/homepage-v3/hero-bg-sm-a7f682621b3ceceb1a711f30165a0feab8f901cdbb1e0b9b41c1729f848ea0')] 
+             bg-cover bg-center bg-no-repeat 
+             bg-base-100/80 backdrop-blur-md shadow-sm">      <div className="navbar-start">
         
         { role && (
           <div className="dropdown">
@@ -133,7 +115,7 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">
           <li>
             <a 
-              onClick={() => scrollToSection('events')}
+              onClick={() => navigate('/events')}
               className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group cursor-pointer"
             >
               Events
@@ -141,7 +123,7 @@ const Navbar = () => {
           </li>
           <li>
             <a 
-              onClick={() => scrollToSection('team')}
+              onClick={() => navigate('/team')}
               className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group cursor-pointer"
             >
               Our Team
@@ -149,7 +131,7 @@ const Navbar = () => {
           </li>
           <li>
             <a 
-              onClick={() => scrollToSection('about')}
+              onClick={() => navigate('/about')}
               className="text-white hover:text-blue-600 font-medium px-3 py-2 rounded-md hover:bg-blue-50 transition-all duration-200 relative group cursor-pointer"
             >
               About
