@@ -1,77 +1,116 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../utils/UserContext';
+import { Mail, Award, Star, Crown, GraduationCap, Github, Linkedin } from 'lucide-react';
 
 const TeamCard = ({ teamDetails }) => {
     const { firstName, photoUrl, role, username, description } = teamDetails;
     const { auth } = useContext(UserContext);
 
-    const getRoleColor = (role) => {
-        switch (role?.toLowerCase()) {
-            case 'president':
-            case 'chairperson':
-                return 'text-yellow-400 bg-yellow-400';
-            case 'vice president':
-            case 'vice-president':
-                return 'text-orange-400 bg-orange-400';
-            case 'secretary':
-                return 'text-green-400 bg-green-400';
-            case 'treasurer':
-                return 'text-blue-400 bg-blue-400';
-            case 'coordinator':
-            case 'member':
-                return 'text-purple-400 bg-purple-400';
-            default:
-                return 'text-blue-400 bg-blue-400';
+    const getRoleStyles = (role) => {
+        const roleStr = role?.toLowerCase() || '';
+        
+        if (roleStr.includes('president') || roleStr.includes('chairperson')) {
+            return {
+                bg: 'bg-gradient-to-r from-yellow-500 to-amber-600',
+                text: 'text-white',
+                icon: Crown,
+                glow: 'shadow-yellow-500/40'
+            };
         }
+        if (roleStr.includes('vice') || roleStr.includes('secretary') || roleStr.includes('treasurer')) {
+            return {
+                bg: 'bg-gradient-to-r from-orange-500 to-red-600',
+                text: 'text-white',
+                icon: Award,
+                glow: 'shadow-orange-500/40'
+            };
+        }
+        if (roleStr.includes('coordinator') || roleStr.includes('faculty') || roleStr.includes('professor') || roleStr.includes('dr.')) {
+            return {
+                bg: 'bg-gradient-to-r from-emerald-500 to-teal-600',
+                text: 'text-white',
+                icon: GraduationCap,
+                glow: 'shadow-emerald-500/40'
+            };
+        }
+        return {
+            bg: 'bg-gradient-to-r from-blue-500 to-indigo-600',
+            text: 'text-white',
+            icon: Star,
+            glow: 'shadow-blue-500/40'
+        };
     };
 
+    const roleStyles = getRoleStyles(role);
+
     return (
-        <div className="bg-black bg-opacity-80 backdrop-blur-sm rounded-xl p-6 max-w-sm border border-gray-700 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 hover:bg-opacity-90 group">
-            {/* Profile Image */}
-            <div className="relative mb-4 overflow-hidden rounded-lg">
-                <img 
-                    src={photoUrl ? photoUrl : "https://play-lh.googleusercontent.com/PhgyB8JGhS6Dl4WI4z6R2nEBUlWoLV7Yk-VHhLiEI5XAfRWmXu5Y2TogfRd8UxC9oPA"} 
-                    alt={firstName} 
-                    className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-            </div>
-
-            {/* Member Name */}
-            <h3 className="text-2xl font-bold text-white mb-2 text-center group-hover:text-blue-400 transition-colors duration-200">
-                {firstName}
-            </h3>
-
-            {/* Role Display */}
-            <div className="text-center mb-4">
-                <span className="inline-block px-4 py-2 rounded-full text-sm font-semibold text-black bg-blue-400">
-                    {role}
-                </span>
-            </div>
-
-            {/* Description */}
-            {description && (
-                <p className="text-gray-300 text-sm mb-4 leading-relaxed text-center line-clamp-3">
-                    {description}
-                </p>
-            )}
-
-            {/* Contact Info (only if logged in) */}
-            {auth && username && (
-                <div className="pt-4 border-t border-gray-600">
-                    <div className="flex items-center justify-center space-x-2">
-                        <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                        </svg>
-                        <p className="text-xs text-gray-400">
-                            {username}
-                        </p>
+        <div className="group relative w-full max-w-sm">
+            {/* Card Container */}
+            <div className="bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 border border-slate-700/50 hover:border-slate-600/70 hover:bg-slate-800/95">
+                
+                {/* Profile Image - Circular */}
+                <div className="relative mb-6 flex justify-center">
+                    <div className="relative">
+                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-600/50 group-hover:border-slate-500/70 transition-all duration-500">
+                            <img 
+                                src={
+                                    photoUrl || 
+                                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                                } 
+                                alt={firstName} 
+                                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                            />
+                        </div>
+                        
+                        {/* Glow effect behind image */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 scale-150" />
                     </div>
                 </div>
-            )}
 
-            {/* Hover Effect Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-600 via-transparent to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
+                {/* Member Name */}
+                <h3 className="text-2xl font-bold text-white mb-2 text-center group-hover:text-blue-300 transition-colors duration-300">
+                    {firstName}
+                </h3>
+
+                {/* Role */}
+                <div className="text-center mb-6">
+                    <span className="text-slate-400 text-lg font-medium">
+                        {role}
+                    </span>
+                </div>
+
+                {/* Description */}
+                {description && (
+                    <div className="mb-6">
+                        <p className="text-slate-300 text-sm leading-relaxed text-center line-clamp-3">
+                            {description}
+                        </p>
+                    </div>
+                )}
+
+                {/* Social Icons */}
+                <div className="flex justify-center space-x-4">
+                    {/* GitHub Icon */}
+                    <div className="w-10 h-10 bg-slate-700/50 hover:bg-slate-600/70 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-slate-500/30">
+                        <Github className="w-5 h-5 text-slate-300 hover:text-white transition-colors duration-300" />
+                    </div>
+                    
+                    {/* LinkedIn Icon */}
+                    <div className="w-10 h-10 bg-slate-700/50 hover:bg-blue-600/70 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/30">
+                        <Linkedin className="w-5 h-5 text-slate-300 hover:text-blue-300 transition-colors duration-300" />
+                    </div>
+
+                    {/* Email Icon (only if logged in) */}
+                    {auth && username && (
+                        <div className="w-10 h-10 bg-slate-700/50 hover:bg-emerald-600/70 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-emerald-500/30" title={`Contact: ${username}`}>
+                            <Mail className="w-5 h-5 text-slate-300 hover:text-emerald-300 transition-colors duration-300" />
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Subtle Outer Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-600/15 via-orange-600/10 to-yellow-600/15 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 scale-110" />
         </div>
     );
 };

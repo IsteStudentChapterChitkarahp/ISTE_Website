@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus, Calendar, MapPin, Clock, User, Link, Image, FileText, CheckCircle, XCircle } from "lucide-react";
 
 const EventForm = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const EventForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // ✅ use cookies for auth
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 
@@ -43,7 +44,6 @@ const EventForm = () => {
           text: data.message || "Event created successfully!",
         });
 
-        // Reset form after success
         setFormData({
           name: "",
           venue: "",
@@ -71,25 +71,33 @@ const EventForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6 pt-20">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 pt-20">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/30 to-slate-900/40"></div>
-
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/50 via-black/70 to-gray-800/50"></div>
       
-      <div className="relative w-full max-w-2xl bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl p-8">
+      {/* Animated Background Elements */}
+      <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-gray-500/10 to-slate-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+
+      <div className="relative w-full max-w-4xl bg-gray-800/90 backdrop-blur-xl rounded-3xl border border-gray-700/50 shadow-2xl p-8 hover:shadow-3xl transition-all duration-500">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/30">
+            <Plus className="w-10 h-10 text-white" />
+          </div>
+          <h2 className="text-5xl font-bold bg-gradient-to-r from-gray-100 to-white bg-clip-text text-transparent mb-4">
             Create New Event
           </h2>
-          <p className="text-gray-300">Add a new event to the ISTE calendar</p>
+          <p className="text-gray-400 text-xl">Add a new event to the ISTE calendar</p>
+          <div className="w-32 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Event Name */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-white font-medium">Event Name</span>
+          <div className="space-y-2">
+            <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+              <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+              Event Name
             </label>
             <input
               type="text"
@@ -98,15 +106,16 @@ const EventForm = () => {
               onChange={handleChange}
               placeholder="Enter event name"
               required
-              className="input w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+              className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
             />
           </div>
 
           {/* Venue and Date Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-white font-medium">Venue</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+                <MapPin className="w-5 h-5 mr-2 text-blue-400" />
+                Venue
               </label>
               <input
                 type="text"
@@ -115,13 +124,14 @@ const EventForm = () => {
                 onChange={handleChange}
                 placeholder="Event location"
                 required
-                className="input w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
               />
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-white font-medium">Event Date</span>
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+                Event Date
               </label>
               <input
                 type="date"
@@ -129,16 +139,17 @@ const EventForm = () => {
                 value={formData.eventDate}
                 onChange={handleChange}
                 required
-                className="input w-full bg-white/10 border-white/20 text-white focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
               />
             </div>
           </div>
 
           {/* Time and Status Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-white font-medium">Time</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+                <Clock className="w-5 h-5 mr-2 text-blue-400" />
+                Time
               </label>
               <input
                 type="text"
@@ -147,47 +158,50 @@ const EventForm = () => {
                 onChange={handleChange}
                 placeholder="e.g. 10:30 AM"
                 required
-                className="input w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
               />
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-white font-medium">Status</span>
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+                <CheckCircle className="w-5 h-5 mr-2 text-blue-400" />
+                Status
               </label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="select w-full bg-white/10 border-white/20 text-white focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300 cursor-pointer"
               >
-                <option value="upcoming" className="bg-slate-800">Upcoming</option>
-                <option value="completed" className="bg-slate-800">Completed</option>
+                <option value="upcoming" className="bg-gray-800 text-gray-100">Upcoming</option>
+                <option value="completed" className="bg-gray-800 text-gray-100">Completed</option>
               </select>
             </div>
           </div>
 
           {/* Description */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-white font-medium">Description</span>
+          <div className="space-y-2">
+            <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+              <FileText className="w-5 h-5 mr-2 text-blue-400" />
+              Description
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Describe the event..."
+              placeholder="Describe the event in detail..."
               required
-              rows="4"
-              className="textarea w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300 resize-none"
+              rows="5"
+              className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300 resize-none"
             />
           </div>
 
           {/* Speaker */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-white font-medium">Speaker</span>
-              <span className="label-text-alt text-gray-400">Optional</span>
+          <div className="space-y-2">
+            <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+              <User className="w-5 h-5 mr-2 text-blue-400" />
+              Speaker
+              <span className="ml-2 text-sm text-gray-400 font-normal">(Optional)</span>
             </label>
             <input
               type="text"
@@ -195,87 +209,90 @@ const EventForm = () => {
               value={formData.speaker}
               onChange={handleChange}
               placeholder="Speaker name (if any)"
-              className="input w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+              className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
             />
           </div>
 
           {/* URLs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-white font-medium">Registration Link</span>
-                <span className="label-text-alt text-gray-400">Optional</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+                <Link className="w-5 h-5 mr-2 text-blue-400" />
+                Registration Link
+                <span className="ml-2 text-sm text-gray-400 font-normal">(Optional)</span>
               </label>
               <input
                 type="url"
                 name="registrationLink"
                 value={formData.registrationLink}
                 onChange={handleChange}
-                placeholder="Google Form link"
-                className="input w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+                placeholder="https://forms.google.com/..."
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
               />
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-white font-medium">Photo URL</span>
-                <span className="label-text-alt text-gray-400">Optional</span>
+            <div className="space-y-2">
+              <label className="flex items-center text-gray-200 font-semibold text-lg mb-3">
+                <Image className="w-5 h-5 mr-2 text-blue-400" />
+                Photo URL
+                <span className="ml-2 text-sm text-gray-400 font-normal">(Optional)</span>
               </label>
               <input
                 type="url"
                 name="photoUrl"
                 value={formData.photoUrl}
                 onChange={handleChange}
-                placeholder="Event image URL"
-                className="input w-full bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-blue-400 focus:bg-white/20 transition-all duration-300"
+                placeholder="https://example.com/image.jpg"
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-xl px-4 py-4 text-gray-100 placeholder:text-gray-400 focus:border-blue-500/70 focus:bg-gray-700/70 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"
               />
             </div>
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-none text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <span className="loading loading-spinner loading-sm"></span>
-                Creating Event...
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Create Event
-              </div>
-            )}
-          </button>
+          <div className="pt-6">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-5 px-8 rounded-xl shadow-2xl hover:shadow-blue-500/30 transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none border border-blue-500/30"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-3">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                  <span className="text-lg">Creating Event...</span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-3">
+                  <Plus className="w-6 h-6" />
+                  <span className="text-lg">Create Event</span>
+                </div>
+              )}
+            </button>
+          </div>
         </form>
       </div>
 
       {/* Enhanced Toast Notifications */}
       {toast.show && (
-        <div className="fixed top-20 right-6 z-50 animate-in slide-in-from-right duration-300">
+        <div className="fixed top-6 right-6 z-50 animate-in slide-in-from-right duration-300">
           <div
-            className={`alert shadow-lg border-none backdrop-blur-lg ${
+            className={`flex items-center gap-4 px-6 py-4 rounded-xl shadow-2xl backdrop-blur-xl border ${
               toast.success 
-                ? "bg-green-500/90 text-white" 
-                : "bg-red-500/90 text-white"
+                ? "bg-green-600/90 text-white border-green-500/50" 
+                : "bg-red-600/90 text-white border-red-500/50"
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex-shrink-0">
               {toast.success ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+                <CheckCircle className="w-6 h-6" />
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <XCircle className="w-6 h-6" />
               )}
-              <span className="font-medium">{toast.text}</span>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg">
+                {toast.success ? "Success!" : "Error"}
+              </h4>
+              <p className="text-sm opacity-90">{toast.text}</p>
             </div>
           </div>
         </div>

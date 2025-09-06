@@ -28,7 +28,6 @@ const Footer = () => {
   return (
     <footer 
  className="relative overflow-hidden border-t border-gray-800 
-             bg-[url('https://betterstack.com/assets/v2/homepage-v3/hero-bg-sm-a7f682621b3ceceb1a711f30165a0feab8f901cdbb1e0b9b41c1729f848ea031.jpg')] 
              bg-cover bg-top bg-no-repeat "     >
       {/* Decorative Background */}
       <div className="absolute inset-0 opacity-5">

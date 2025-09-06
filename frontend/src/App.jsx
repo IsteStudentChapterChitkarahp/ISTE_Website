@@ -3,11 +3,9 @@ import './App.css'
 import Navbar from '../components/Navbar'
 import Body from '../components/Body'
 import Marquee from '../components/Update'
-import EventCard from '../components/EventCard'
 import Events from '../components/Events'
 import EventsPreview from '../components/EventsPreview'
 import Team from '../components/Team'
-import TeamPreview from '../components/TeamPreview' // Import the new preview component
 import { UserProvider } from '../utils/UserContext'
 import Login from '../components/Login'
 import ChangeUpdate from '../components/ChangeUpdate'
@@ -16,15 +14,13 @@ import UpdateTeam from '../components/UpdateTeam'
 import Footer from '../components/Footer'
 import About from '../components/About'
 
-// Home page component that includes all main sections
+// Home page component
 const HomePage = () => {
   return (
     <>
       <Body />
       <Marquee />
       <EventsPreview />
-      <TeamPreview /> {/* Use TeamPreview instead of Team */}
-      <Footer/>
     </>
   )
 }
@@ -32,26 +28,33 @@ const HomePage = () => {
 function App() {
   return (
     <UserProvider>
-      <div>
+      <div className="flex flex-col min-h-screen">
         <Navbar />
-        <Routes>
-          {/* Home page with all main sections */}
-          <Route path="/" element={<HomePage />} />
-          
-          {/* Individual pages */}
-          <Route path="/events" element={<Events />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/about" element={<About />} />
-          
-          {/* Admin routes */}
-          <Route path="/admin/update" element={<ChangeUpdate />} />
-          <Route path="/admin/add-event" element={<EventForm />} />
-          <Route path="/admin/update-team" element={<UpdateTeam />} />
-          
-          {/* Catch-all route - redirects to home */}
-          <Route path="*" element={<HomePage />} />
-        </Routes>
+
+        {/* Main content */}
+        <div className="flex-grow">
+          <Routes>
+            {/* Home page */}
+            <Route path="/" element={<HomePage />} />
+
+            {/* Other pages */}
+            <Route path="/events" element={<Events />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/about" element={<About />} />
+
+            {/* Admin routes */}
+            <Route path="/admin/update" element={<ChangeUpdate />} />
+            <Route path="/admin/add-event" element={<EventForm />} />
+            <Route path="/admin/update-team" element={<UpdateTeam />} />
+
+            {/* Fallback */}
+            <Route path="*" element={<HomePage />} />
+          </Routes>
+        </div>
+
+        {/* Footer always visible */}
+        <Footer />
       </div>
     </UserProvider>
   )

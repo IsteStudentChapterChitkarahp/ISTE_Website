@@ -9,15 +9,24 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    useEffect(()=>{
+    
+    useEffect(() => {
         const timer = setTimeout(() => {
-            setMessage("");
             if (message === "Signin Successfully") {
+                // Reload the page first to update any auth context
+                window.location.reload();
+                // Then navigate to homepage
+                setTimeout(() => {
                     navigate("/");
+                }, 100);
+            } else if (message) {
+                // Clear other messages after 3 seconds
+                setMessage("");
             }
-      }, 2000); 
-      return () => clearTimeout(timer);
-    },[message]);
+        }, 2000); 
+        
+        return () => clearTimeout(timer);
+    }, [message, navigate]);
 
     const handleLogin = async() => {
         if (!username.trim() || !password.trim()) {
@@ -38,6 +47,14 @@ const Login = () => {
 
             const data = await res.json();
             setMessage(data.message);
+            
+            // If login successful, trigger page reload and navigation
+            if (data.message === "Signin Successfully") {
+                // Small delay to show success message
+                setTimeout(() => {
+                    window.location.href = "/"; // This will reload and navigate
+                }, 1500);
+            }
         } catch(err) {
             setMessage("Connection failed. Please try again.");
         } finally {
@@ -84,6 +101,7 @@ const Login = () => {
                                 onKeyPress={handleKeyPress}
                                 className="w-full text-gray-500 pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
                                 placeholder="Enter your username"
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
@@ -102,11 +120,13 @@ const Login = () => {
                                 onKeyPress={handleKeyPress}
                                 className="w-full text-gray-500 pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
                                 placeholder="Enter your password"
+                                disabled={isLoading}
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                disabled={isLoading}
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </button>
@@ -122,7 +142,7 @@ const Login = () => {
                         {isLoading ? (
                             <div className="flex items-center justify-center">
                                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                                Signing in...
+                                {message === "Signin Successfully" ? "Redirecting..." : "Signing in..."}
                             </div>
                         ) : (
                             "Sign In"
@@ -142,7 +162,7 @@ const Login = () => {
                             <CheckCircle className="w-6 h-6 flex-shrink-0" />
                             <div>
                                 <h4 className="font-medium">Success!</h4>
-                                <p className="text-sm opacity-90">Login successful</p>
+                                <p className="text-sm opacity-90">Login successful, redirecting...</p>
                             </div>
                         </div>
                     ) : (
