@@ -64,7 +64,7 @@ const Events = () => {
                 {/* Header Section */}
                 <div className="text-center mb-16">
                     <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                        Past <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Events</span>
+                        Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Events</span>
                     </h1>
                     <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto mb-8"></div>
                     <p className="text-slate-300 text-xl max-w-3xl mx-auto mb-6">
