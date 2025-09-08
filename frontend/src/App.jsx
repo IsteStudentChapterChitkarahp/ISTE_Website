@@ -6,16 +6,17 @@ import Marquee from '../components/Update'
 import Events from '../components/Events'
 import EventsPreview from '../components/EventsPreview'
 import Team from '../components/Team'
-import { UserProvider } from '../utils/UserContext'
 import Login from '../components/Login'
 import ChangeUpdate from '../components/ChangeUpdate'
 import EventForm from '../components/AddEvents'
 import UpdateTeam from '../components/UpdateTeam'
 import Footer from '../components/Footer'
 import About from '../components/About'
+import ProtectedRoute from '../components/ProtectedRoute'
+import { UserProvider } from '../utils/UserContext'
 
 // Home page component
-const HomePage = () => {
+const HomePage = () => {  
   return (
     <>
       <Body />
@@ -26,6 +27,7 @@ const HomePage = () => {
 }
 
 function App() {
+
   return (
     <UserProvider>
       <div className="flex flex-col min-h-screen">
@@ -33,6 +35,7 @@ function App() {
 
         {/* Main content */}
         <div className="flex-grow">
+         {/* <Suspense fallback={<Shimmer />}> */}
           <Routes>
             {/* Home page */}
             <Route path="/" element={<HomePage />} />
@@ -44,13 +47,17 @@ function App() {
             <Route path="/about" element={<About />} />
 
             {/* Admin routes */}
-            <Route path="/admin/update" element={<ChangeUpdate />} />
-            <Route path="/admin/add-event" element={<EventForm />} />
-            <Route path="/admin/update-team" element={<UpdateTeam />} />
+            
+             <>
+             <Route path="/admin/update" element={<ProtectedRoute component={<ChangeUpdate />} />} />
+            <Route path="/admin/add-event" element={<ProtectedRoute component={<EventForm />} />} />
+            <Route path="/admin/update-team" element={<ProtectedRoute component={<UpdateTeam />} />} />
+            </>
 
             {/* Fallback */}
             <Route path="*" element={<HomePage />} />
           </Routes>
+           {/* </Suspense> */}
         </div>
 
         {/* Footer always visible */}
