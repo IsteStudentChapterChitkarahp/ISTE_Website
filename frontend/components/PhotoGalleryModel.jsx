@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { X, Camera, ChevronLeft, ChevronRight } from "lucide-react";
+import { UserContext } from "../utils/UserContext";
 
 const PhotoGalleryModal = ({
   showPhotoGallery,
@@ -15,6 +16,7 @@ const PhotoGalleryModal = ({
 
   // Filter out photos that don't have valid URLs
   const validPhotos = photos?.filter(photo => photo?.photoUrl && photo.photoUrl.trim() !== '') || [];
+  const { auth } = useContext(UserContext);
 
   return (
     <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -88,7 +90,7 @@ const PhotoGalleryModal = ({
                             )}
                           </div>
                         </div>
-                        {validPhotos[0].createdBy && (
+                        {auth && validPhotos[0].createdBy && (
                           <div className="text-right bg-gradient-to-br from-green-900/20 to-blue-900/20 rounded-lg p-3 border border-green-500/20">
                             <p className="text-green-300 text-sm font-semibold">
                               Photo by {validPhotos[0].createdBy.firstName || "User"}
@@ -141,7 +143,7 @@ const PhotoGalleryModal = ({
                                 {photo.createdAt &&
                                   new Date(photo.createdAt).toLocaleDateString()}
                               </p>
-                              {photo.createdBy && (
+                              {auth && photo.createdBy && (
                                 <p className="text-green-300 text-xs bg-green-500/20 rounded px-2 py-1 border border-green-500/30">
                                   {photo.createdBy.firstName || "User"}
                                 </p>

@@ -374,9 +374,7 @@ const About = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">Student Coordinators</h3>
                 <div className="space-y-2 mb-4">
-                  <p className="text-lg font-medium text-purple-400">Plaban J Rajkhowa</p>
-                  <p className="text-lg font-medium text-purple-400">Radhika Sood</p>
-                  <p className="text-lg font-medium text-purple-400">Shubham Barai</p>
+                  <p className="text-lg font-medium text-purple-400">Dr. Nisha Rana</p>
                 </div>
                 <p className="text-gray-400 group-hover:text-gray-300 transition-colors">
                   Empowering student communities and driving engagement through innovation
