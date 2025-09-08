@@ -5,6 +5,48 @@ const Event = require("../models/eventSchema");
 const auth = require("../middleWare/auth");
 const User = require('../models/usersSchema');
 const Update = require('../models/updateSchema');
+const ImageGallery = require('../models/imageGallerySchema');
+
+const imageGallerySchema = zod.object({
+  eventTitle: zod.string(),
+  imageTitle: zod.string().optional(),
+photoUrl: zod.string().url()
+})
+
+router.get("/event/images",async(req,res)=>{
+  try{
+        const images = await ImageGallery.find().populate("createdBy", "firstName username role");
+        console.log(images);
+        res.status(200).json(images);
+    } catch(err){
+        res.status(404).json({message: "Error fetching images...."})
+    }
+})
+router.post("/event/images", auth, async(req,res)=>{
+   try{
+            const user = await User.findById(req.user._id).select("role");
+ if (!["Technical Head", "Event Coordinator", "Faculty"].includes(user.role)) {
+      return res.status(403).json({ message: "You are not authorized to add photos" });
+    }
+    
+        const result = imageGallerySchema.safeParse(req.body);
+if (!result.success) {
+  return res.status(400).json({ message: "Invalid input", error: result.error.errors });
+}
+const data = result.data;
+data.createdBy = req.user._id;
+
+        const images = await ImageGallery.create(data);
+
+    await User.populate("createdBy", "firstName username role");
+
+    console.log(images);
+        res.status(201).json({ message: "Images added successfully", images });
+    } catch(err){
+                res.status(500).json({ message: "Server error" });
+
+    }
+})
 
 const eventSchema = zod.object({
     name: zod.string(),
@@ -40,7 +82,7 @@ router.get("/events",async(req,res)=>{
 router.post("/user/eventManager",auth, async (req,res)=>{
     try{
             const user = await User.findById(req.user._id).select("role");
- if (!["Technical Head", "Event Coordinator"].includes(user.role)) {
+ if (!["Technical Head", "Event Coordinator", "Faculty"].includes(user.role)) {
       return res.status(403).json({ message: "You are not authorized to create events" });
     }
     
@@ -109,6 +151,7 @@ router.get("/updates", async(req,res)=>{
         res.status(404).json({message: "Error error while fetching new updates...."})
     }
 })
+
 
 
 
