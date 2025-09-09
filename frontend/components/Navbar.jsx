@@ -78,6 +78,10 @@ const Navbar = () => {
     navigate("/admin/event/photos")
   }
 
+  const handleAddMembers= () =>{
+   navigate("/admin/addMembers")
+  }
+
   return (
     <>
       {/* Logout Success Message */}
@@ -122,8 +126,11 @@ const Navbar = () => {
                 <li><a onClick={handleChangeUpdates} className="cursor-pointer">Change Updates</a></li>
                  <li><a onClick={handleImageGalleryUpdate} className="cursor-pointer">Update Image Gallery</a></li>
                 <li><a className="cursor-pointer">Update About Us</a></li>
-                {(role === "Faculty" || role === "Technical Head") && (
+                {(role === "Faculty" || role === "Technical Head" || role==="Membership Chair") && (
+                  <>
                   <li><a onClick={handleUpdateTeam} className="cursor-pointer">Update Team</a></li>
+                  <li><a onClick={handleAddMembers} className="cursor-pointer">Add Members</a></li>
+                  </>
                 )}
               </ul>
             </div>

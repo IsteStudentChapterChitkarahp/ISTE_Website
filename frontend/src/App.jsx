@@ -15,6 +15,7 @@ import About from '../components/About'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { UserProvider } from '../utils/UserContext'
 import EventImagesForm from '../components/ImageGalleryUpdate'
+import AddMemberForm from '../components/AddMembers'
 
 // Home page component
 const HomePage = () => {  
@@ -54,6 +55,7 @@ function App() {
             <Route path="/admin/add-event" element={<ProtectedRoute component={<EventForm />} />} />
             <Route path="/admin/update-team" element={<ProtectedRoute component={<UpdateTeam />} />} />
             <Route path="/admin/event/photos" element={<ProtectedRoute component={<EventImagesForm />} />} />
+            <Route path="/admin/addMembers" element={<ProtectedRoute component={<AddMemberForm />} />} />
             </>
 
             {/* Fallback */}

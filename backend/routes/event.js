@@ -6,6 +6,7 @@ const auth = require("../middleWare/auth");
 const User = require('../models/usersSchema');
 const Update = require('../models/updateSchema');
 const ImageGallery = require('../models/imageGallerySchema');
+const Members = require('../models/membersSchema');
 
 const imageGallerySchema = zod.object({
   eventTitle: zod.string(),
@@ -153,6 +154,52 @@ router.get("/updates", async(req,res)=>{
 })
 
 
+const membersSchema = zod.object({
+  email: zod.string().email(),
+  firstName: zod.string().min(1, "First name is required"),
+  lastName: zod.string().optional(),
+  photoUrl: zod.string().url().optional().or(zod.literal("")), // allow empty string
+  phoneNumber: zod.string().min(7, "Invalid phone number"), // keep string, you already validate in Mongoose
+  section: zod.string().min(1, "Section is required"),
+  year: zod.string().min(1, "Year is required"),
+  studentId: zod.number(),
+});
+
+
+router.post('/addmembers', async (req, res) => {
+  try {
+    const parsedData = membersSchema.parse(req.body);
+
+    const member = new Members(parsedData);
+    await member.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Member added successfully',
+      data: member,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+});
+
+router.get('/members', async (req, res) => {
+  try {
+    const members = await Members.find();
+    res.json({
+      success: true,
+      data: members,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch members',
+    });
+  }
+});
 
 
 module.exports = router;
