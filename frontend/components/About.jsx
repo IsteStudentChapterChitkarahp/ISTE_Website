@@ -405,11 +405,11 @@ const About = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 mb-8">
                 <div className="flex items-center space-x-3 text-gray-300">
                   <MapPin className="w-6 h-6 text-blue-400" />
-                  <span className="text-lg">Chitkara University, Punjab</span>
+                  <span className="text-lg">Chitkara University, Himachal Pradesh</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300">
                   <Mail className="w-6 h-6 text-purple-400" />
-                  <span className="text-lg">iste@chitkara.edu.in</span>
+                  <span className="text-lg">iste@chitkarauniversity.edu.in</span>
                 </div>
               </div>
               <button 

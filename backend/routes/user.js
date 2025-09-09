@@ -7,13 +7,12 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 const argon2 = require("argon2");
 
-
 const signupSchema = zod.object({
     username: zod.string().email().refine(email => email.endsWith("@chitkarauniversity.edu.in"), {
         message: "Email must be a Chitkara University email"
     }), 
     firstName: zod.string(),
-    lastName: zod.string(),
+    lastName: zod.string().optional(),
     password: zod.string(),
     photoUrl: zod.string().url().optional(),
     role: zod.string(),
@@ -38,7 +37,7 @@ router.post("/user/signup", async(req,res)=>{
     try{
     const { success } = signupSchema.safeParse(req.body);
     if(!success){
-        return res.status(411).json({
+        return res.status(400).json({
             message: "Incorrect Inputs"
         })
     }
@@ -58,7 +57,7 @@ const user= await User.create({
     password: hashedPassword,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    photoUrl: req.body.photoUrl,
+    photoUrl: req.body.photoUrl || undefined,
     role: req.body.role,
     description: req.body.description,
 });
