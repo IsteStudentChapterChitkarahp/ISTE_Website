@@ -222,7 +222,7 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
             <button
               onClick={fetchEventPhotos}
               disabled={loadingPhotos}
-              className="inline-flex items-center justify-center w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 text-white font-semibold py-3 px-6 rounded-lg text-sm shadow-lg hover:shadow-xl hover:shadow-slate-500/30 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-500 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-lg text-sm shadow-lg hover:shadow-xl hover:shadow-slate-500/30 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Camera className="w-4 h-4 mr-2" />
               {loadingPhotos ? 'Loading...' : 'View Photos'}

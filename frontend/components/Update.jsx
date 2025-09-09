@@ -65,7 +65,7 @@ const Marquee = () => {
   }, []);
 
   return (
-    <div className="whitespace-nowrap marquee-container py-6 relative border-y-2 border-white border-opacity-20">
+    <div className="whitespace-nowrap marquee-container py-6 relative border-y-2 border-white border-opacity-20 overflow-hidden">
       {/* Gradient overlays */}
       <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-blue-600 to-transparent z-10 pointer-events-none"></div>
       <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-purple-600 to-transparent z-10 pointer-events-none"></div>
