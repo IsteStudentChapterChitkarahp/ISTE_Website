@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { X, Camera, ChevronLeft, ChevronRight } from "lucide-react";
+import { UserContext } from "../utils/UserContext";
 
 const PhotoGalleryModal = ({
   showPhotoGallery,
@@ -15,6 +16,7 @@ const PhotoGalleryModal = ({
 
   // Filter out photos that don't have valid URLs
   const validPhotos = photos?.filter(photo => photo?.photoUrl && photo.photoUrl.trim() !== '') || [];
+  const { auth } = useContext(UserContext);
 
   return (
     <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -53,7 +55,60 @@ const PhotoGalleryModal = ({
             </div>
           ) : (
             <>
+<<<<<<< HEAD
               {validPhotos.length && (
+=======
+              {validPhotos.length === 1 ? (
+                // Single photo display
+                <div className="flex justify-center w-full h-full">
+                  <div className="relative max-w-5xl w-full flex flex-col justify-center">
+                    <img
+                      src={validPhotos[0].photoUrl}
+                      alt={validPhotos[0].imageTitle || `${name} photo`}
+                      className="w-full max-h-[65vh] object-contain rounded-2xl shadow-lg border-2 border-purple-500/20"
+                      onError={(e) => {
+                        console.error(
+                          "Single image failed to load:",
+                          validPhotos[0].photoUrl
+                        );
+                        e.target.src =
+                          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80";
+                      }}
+                    />
+
+                    {/* Photo Info */}
+                    <div className="mt-6 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-xl p-6 border border-blue-500/20 backdrop-blur-sm">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          {validPhotos[0].imageTitle && (
+                            <h3 className="text-white font-bold text-xl mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                              {validPhotos[0].imageTitle}
+                            </h3>
+                          )}
+                          <div className="space-y-2">
+                            {validPhotos[0].createdAt && (
+                              <p className="text-purple-300 text-sm bg-purple-500/10 rounded-lg px-3 py-1 inline-block border border-purple-500/20">
+                                {new Date(validPhotos[0].createdAt).toLocaleDateString()}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        {auth && validPhotos[0].createdBy && (
+                          <div className="text-right bg-gradient-to-br from-green-900/20 to-blue-900/20 rounded-lg p-3 border border-green-500/20">
+                            <p className="text-green-300 text-sm font-semibold">
+                              Photo by {validPhotos[0].createdBy.firstName || "User"}
+                            </p>
+                            <p className="text-green-400/70 text-xs mt-1">
+                              ID: {validPhotos[0].createdBy._id ? validPhotos[0].createdBy._id.slice(-8) : "N/A"}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+>>>>>>> cbab63533165f6e5ef30a9d351e9e533bcacefa0
                 // Multiple photos grid - Enhanced layout
                 <div className="w-full h-full flex flex-col">
                   {/* Responsive grid with larger photos */}
@@ -92,7 +147,7 @@ const PhotoGalleryModal = ({
                                 {photo.createdAt &&
                                   new Date(photo.createdAt).toLocaleDateString()}
                               </p>
-                              {photo.createdBy && (
+                              {auth && photo.createdBy && (
                                 <p className="text-green-300 text-xs bg-green-500/20 rounded px-2 py-1 border border-green-500/30">
                                   {photo.createdBy.firstName || "User"}
                                 </p>
