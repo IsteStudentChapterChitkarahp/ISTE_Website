@@ -15,13 +15,13 @@ const Team = () => {
         const name = member.firstName?.toLowerCase() || '';
         
         // Faculty check
-        const facultyRoles = ['faculty coordinator', 'coordinator', 'professor', 'faculty', 'advisor', 'mentor'];
+        const facultyRoles = [ 'faculty'];
         if (facultyRoles.some(facultyRole => role.includes(facultyRole)) || name.includes('dr.')) {
             return 'faculty';
         }
         
         // Executive positions
-        const executiveRoles = ['president', 'chairperson', 'vice president', 'vice-president', 'secretary', 'treasurer'];
+        const executiveRoles = ['president' , 'vice president', 'general secretary', 'treasurer','technical head','joint secretary','content team','social media team','event cordinator','membership cordinator'];
         if (executiveRoles.some(execRole => role.includes(execRole))) {
             return 'executive';
         }

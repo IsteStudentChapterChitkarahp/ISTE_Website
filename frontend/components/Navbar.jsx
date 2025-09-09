@@ -74,6 +74,10 @@ const Navbar = () => {
     navigate("/admin/update-team");
   };
 
+  const handleImageGalleryUpdate= () => {
+    navigate("/admin/event/photos")
+  }
+
   return (
     <>
       {/* Logout Success Message */}
@@ -116,6 +120,7 @@ const Navbar = () => {
               >
                 <li><a onClick={handleAddEvents} className="cursor-pointer">Add Events</a></li>
                 <li><a onClick={handleChangeUpdates} className="cursor-pointer">Change Updates</a></li>
+                 <li><a onClick={handleImageGalleryUpdate} className="cursor-pointer">Update Image Gallery</a></li>
                 <li><a className="cursor-pointer">Update About Us</a></li>
                 {(role === "Faculty" || role === "Technical Head") && (
                   <li><a onClick={handleUpdateTeam} className="cursor-pointer">Update Team</a></li>
