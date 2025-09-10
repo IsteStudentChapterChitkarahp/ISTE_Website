@@ -2,84 +2,77 @@ import { useEffect, useState } from "react";
 
 const Marquee = () => {
   const [items, setItems] = useState([]);
+  const [isHoveringCard, setIsHoveringCard] = useState(false);
+
+  // Sample data for demonstration
+  useEffect(() => {
+    // Using sample data since we can't fetch from localhost
+    const sampleItems = [
+      { _id: "1", type: "logo", link: "https://via.placeholder.com/200x80/4F46E5/white?text=LOGO1" },
+      { _id: "2", type: "text", message: "Welcome to ISTE!" },
+      { _id: "3", type: "logo", link: "https://via.placeholder.com/200x80/7C3AED/white?text=LOGO2" },
+      { _id: "4", type: "text", message: "Innovation & Technology" },
+      { _id: "5", type: "logo", link: "https://via.placeholder.com/200x80/EC4899/white?text=LOGO3" },
+      { _id: "6", type: "text", message: "Join Us Today!" },
+    ];
+    setItems(sampleItems);
+  }, []);
 
   // Function to convert various image links to direct URLs
   const getDirectImageUrl = (url) => {
     if (!url) return null;
-    
     const cleanUrl = url.trim();
-    
-    // Handle Google Drive URLs - use thumbnail API for better compatibility
-    if (cleanUrl.includes('drive.google.com')) {
+
+    if (cleanUrl.includes("drive.google.com")) {
       let fileId = null;
-      
-      // Extract from sharing URL format
       const sharingMatch = cleanUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
-      if (sharingMatch) {
-        fileId = sharingMatch[1];
-      }
-      
-      // Extract from uc export format
+      if (sharingMatch) fileId = sharingMatch[1];
       const exportMatch = cleanUrl.match(/[?&]id=([a-zA-Z0-9-_]+)/);
-      if (exportMatch) {
-        fileId = exportMatch[1];
-      }
-      
-      if (fileId) {
-        // Use Google Drive thumbnail API which is more reliable
-        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
-      }
+      if (exportMatch) fileId = exportMatch[1];
+      if (fileId) return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
     }
-    
-    // Handle Flickr URLs
-    if (cleanUrl.includes('flickr.com/photos/')) {
+
+    if (cleanUrl.includes("flickr.com/photos/")) {
       const photoIdMatch = cleanUrl.match(/photos\/[^\/]+\/(\d+)/);
       if (photoIdMatch) {
         const photoId = photoIdMatch[1];
-        // Use Flickr's more reliable format
         return `https://live.staticflickr.com/${Math.floor(photoId / 1000000) % 1000}/${photoId}_b.jpg`;
       }
     }
-    
-    // Handle Google Photos
-    if (cleanUrl.includes('photos.google.com') || cleanUrl.includes('photos.app.goo.gl')) {
+
+    if (cleanUrl.includes("photos.google.com") || cleanUrl.includes("photos.app.goo.gl")) {
       return cleanUrl;
     }
-    
-    // Return original URL if it looks like a direct image link
+
     if (cleanUrl.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i)) {
       return cleanUrl;
     }
-    
-    return cleanUrl; // Return original URL as last resort
+
+    return cleanUrl;
   };
 
-  useEffect(() => {
-    fetch("http://localhost:5000/updates")
-      .then((fetchedUpdates) => fetchedUpdates.json())
-      .then((res) => {
-        setItems(res);
-        console.log("items", res);
-      })
-      .catch((error) => console.error("Error fetching updates:", error));
-  }, []);
-
   return (
-    <div className="whitespace-nowrap marquee-container py-6 relative border-y-2 border-white border-opacity-20 ">
+    <div
+      className={`whitespace-nowrap marquee-container py-6 relative border-y-2 border-white border-opacity-20 
+        ${isHoveringCard ? "overflow-visible" : "overflow-hidden"} 
+      `}
+    >
       {/* Gradient overlays */}
       <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-blue-600 to-transparent z-10 pointer-events-none"></div>
       <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-purple-600 to-transparent z-10 pointer-events-none"></div>
 
-      {/* Top and bottom gradient lines */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400"></div>
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400"></div>
+      {/* Top and bottom gradient lines - these will now pause with the marquee */}
+      <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 marquee-border ${isHoveringCard ? 'paused' : ''}`}></div>
+      <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400 marquee-border ${isHoveringCard ? 'paused' : ''}`}></div>
 
-      <div className="flex w-max marquee-content">
+      <div className={`flex w-max marquee-content ${isHoveringCard ? 'paused' : ''}`}>
         {[...items, ...items].map((item, idx) =>
           item.type === "logo" ? (
             <div
               key={item._id ? `${item._id}-${idx}` : `logo-${idx}`}
               className="mx-8 inline-block group relative"
+              onMouseEnter={() => setIsHoveringCard(true)}
+              onMouseLeave={() => setIsHoveringCard(false)}
             >
               {/* Main image container */}
               <div className="relative overflow-hidden rounded-lg bg-white bg-opacity-10 p-3 backdrop-blur-sm border border-white border-opacity-20 transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:bg-opacity-20 group-hover:shadow-2xl group-hover:shadow-purple-500/25 cursor-pointer">
@@ -87,90 +80,33 @@ const Marquee = () => {
                   src={getDirectImageUrl(item.link)}
                   alt="Partner logo"
                   className="h-14 w-auto object-contain transition-all duration-500 ease-out group-hover:scale-105"
-                  onError={(e) => {
-                    console.error('Failed to load image:', item.link);
-                    
-                    // Try alternative formats for Google Drive
-                    if (item.link.includes('drive.google.com') && !e.target.dataset.retried) {
-                      const fileIdMatch = item.link.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
-                      if (fileIdMatch) {
-                        const fileId = fileIdMatch[1];
-                        e.target.dataset.retried = 'true';
-                        // Try the uc export format as fallback
-                        e.target.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
-                        return;
-                      }
-                    }
-                    
-                    // Try alternative Flickr format
-                    if (item.link.includes('flickr.com') && !e.target.dataset.flickrRetried) {
-                      const photoIdMatch = item.link.match(/photos\/[^\/]+\/(\d+)/);
-                      if (photoIdMatch) {
-                        const photoId = photoIdMatch[1];
-                        e.target.dataset.flickrRetried = 'true';
-                        e.target.src = `https://live.staticflickr.com/${photoId.substring(0, 4)}/${photoId}_m.jpg`;
-                        return;
-                      }
-                    }
-                    
-                    // Show placeholder on final failure
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                  onLoad={() => {
-                    console.log('Successfully loaded image:', getDirectImageUrl(item.link));
-                  }}
+                  onError={(e) => (e.target.style.display = "none")}
                 />
-                
-                {/* Fallback placeholder (hidden by default) */}
-                <div className="h-14 w-14 hidden items-center justify-center bg-gray-400 bg-opacity-30 rounded">
-                  <span className="text-xs text-gray-300">📷</span>
-                </div>
-                
-                {/* Hover overlay effect */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-                
-                {/* Shimmer effect on hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out bg-gradient-to-r from-transparent via-white/20 to-transparent transform skew-x-12"></div>
               </div>
 
-              {/* Large hover card - positioned above the marquee */}
+              {/* Hover card */}
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out scale-75 group-hover:scale-100 pointer-events-none z-50">
                 <div className="relative bg-white bg-opacity-95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white border-opacity-30 p-6 min-w-[300px] max-w-[400px]">
-                  {/* Arrow pointing down */}
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2">
                     <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-white border-opacity-95"></div>
                   </div>
-                  
-                  {/* Large image */}
                   <div className="flex justify-center items-center bg-gray-50 rounded-xl p-4 mb-4">
                     <img
                       src={getDirectImageUrl(item.link)}
                       alt="Large view"
                       className="max-w-full max-h-48 object-contain rounded-lg shadow-lg"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
                     />
-                    <div className="hidden w-32 h-32 items-center justify-center bg-gray-200 rounded-lg">
-                      <span className="text-gray-400 text-4xl">📷</span>
-                    </div>
                   </div>
-                  
-                  {/* Image info */}
                   <div className="text-center">
-                    <h3 className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent font-bold italic text-lg mb-2 drop-shadow-lg">ISTE Chitkara Chapter</h3>
+                    <h3 className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent font-bold italic text-lg mb-2 drop-shadow-lg">
+                      ISTE Chitkara Chapter
+                    </h3>
                     <p className="text-gray-600 text-sm">
-                      {item.link.includes('drive.google.com') && '📁 Google Drive'}
-                      {item.link.includes('flickr.com') && '📸 Flickr'}
-                      {item.link.includes('photos.google.com') && '🖼️ Google Photos'}
+                      {item.link.includes("drive.google.com") && "📁 Google Drive"}
+                      {item.link.includes("flickr.com") && "📸 Flickr"}
+                      {item.link.includes("photos.google.com") && "🖼️ Google Photos"}
+                      {!item.link.includes("drive.google.com") && !item.link.includes("flickr.com") && !item.link.includes("photos.google.com") && "🖼️ Image"}
                     </p>
-                  </div>
-                  
-                  {/* Decorative gradient border */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 p-0.5 -z-10">
-                    <div className="w-full h-full bg-white bg-opacity-95 rounded-2xl"></div>
                   </div>
                 </div>
               </div>
@@ -188,42 +124,61 @@ const Marquee = () => {
         )}
       </div>
 
-      {/* CSS Styles */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .marquee-content {
-            animation: marquee 30s linear infinite;
+      {/* Enhanced CSS Styles */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
           }
-          
+
+          @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+
+          .marquee-container {
+            background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #1e40af 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+          }
+
+          .marquee-content {
+            animation: marquee 25s linear infinite;
+          }
+
           .marquee-container:hover .marquee-content {
             animation-play-state: paused;
           }
-          
-          @keyframes marquee {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
+
+          .marquee-border {
+            animation: marquee 25s linear infinite;
           }
-          
+
+          .marquee-border.paused {
+            animation-play-state: paused;
+          }
+
           .text-glow {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-shadow: 
+              0 0 10px rgba(255, 255, 255, 0.5),
+              0 0 20px rgba(255, 255, 255, 0.3),
+              0 0 30px rgba(255, 255, 255, 0.2);
           }
-          
-          /* Remove extra padding since cards now appear below */
-          .marquee-container {
-            position: relative;
-            z-index: 10;
+
+          .logo-hover {
+            transition: all 0.3s ease;
           }
-          
-          /* Ensure hover cards appear above other content */
-          .group:hover .absolute.top-full {
-            z-index: 1000;
+
+          .logo-hover:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
           }
-        `
-      }} />
+        `,
+        }}
+      />
     </div>
   );
 };
