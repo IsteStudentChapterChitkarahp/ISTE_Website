@@ -128,7 +128,7 @@ const About = () => {
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight">
               About 
               <span className="block bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-pulse">
-                ISTE Chitkara
+                ISTE Student Chapter
               </span>
             </h1>
             
