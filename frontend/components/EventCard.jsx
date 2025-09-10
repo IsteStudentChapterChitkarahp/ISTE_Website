@@ -22,28 +22,29 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   const [loadingPhotos, setLoadingPhotos] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
+  // ✅ New state for Read More
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // ✅ Split description into words
+  const words = description?.split(" ") || [];
+  const truncatedDescription = words.slice(0, 20).join(" ") + (words.length > 20 ? "..." : "");
+
   const fetchEventPhotos = async () => {
-    console.log('Fetching photos for event:', name);
     try {
       setLoadingPhotos(true);
       const response = await fetch('http://localhost:5000/event/images');
-      if (response) {
+      if (response.ok) {
         const allPhotos = await response.json();
-        console.log('All photos received:', allPhotos);
 
-        // Filter photos for this specific event
         const eventPhotos = allPhotos.filter(
           (photo) =>
             photo.eventTitle &&
             photo.eventTitle.toLowerCase().trim() === name.toLowerCase().trim()
         );
 
-        console.log(`Filtered photos for "${name}":`, eventPhotos);
         setPhotos(eventPhotos);
       } else {
         console.error('Failed to fetch photos. Status:', response.status);
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
         setPhotos([]);
       }
     } catch (error) {
@@ -95,9 +96,18 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
                 <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
                   {name.toUpperCase()}
                 </h2>
-                <p className="text-slate-300 text-lg lg:text-xl leading-relaxed mb-8 font-light">
-                  {description}
+                <p className="text-slate-300 text-lg lg:text-xl leading-relaxed mb-4 font-light">
+                  {isExpanded ? description : truncatedDescription}
                 </p>
+                {words.length > 20 && (
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-blue-400 font-medium hover:underline mb-8"
+                  >
+                    {isExpanded ? "Read Less" : "Read More"}
+                  </button>
+                )}
+                
                 <div className="space-y-2 mb-8">
                   <div className="flex items-center text-slate-300">
                     <Calendar className="w-5 h-5 mr-3 text-blue-400" />
@@ -203,9 +213,17 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
             </div>
           </div>
 
-          <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-4">
-            {description}
+          <p className="text-slate-400 text-sm leading-relaxed mb-2">
+            {isExpanded ? description : truncatedDescription}
           </p>
+          {words.length > 20 && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-blue-400 text-xs font-medium hover:underline mb-4"
+            >
+              {isExpanded ? "Read Less" : "Read More"}
+            </button>
+          )}
 
           <div className="space-y-3">
             {registrationLink && (
