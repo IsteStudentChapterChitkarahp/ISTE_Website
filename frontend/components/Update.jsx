@@ -6,17 +6,14 @@ const Marquee = () => {
 
   // Sample data for demonstration
   useEffect(() => {
-    // Using sample data since we can't fetch from localhost
-    const sampleItems = [
-      { _id: "1", type: "logo", link: "https://via.placeholder.com/200x80/4F46E5/white?text=LOGO1" },
-      { _id: "2", type: "text", message: "Welcome to ISTE!" },
-      { _id: "3", type: "logo", link: "https://via.placeholder.com/200x80/7C3AED/white?text=LOGO2" },
-      { _id: "4", type: "text", message: "Innovation & Technology" },
-      { _id: "5", type: "logo", link: "https://via.placeholder.com/200x80/EC4899/white?text=LOGO3" },
-      { _id: "6", type: "text", message: "Join Us Today!" },
-    ];
-    setItems(sampleItems);
-  }, []);
+    const updatesData = async() =>{
+      const fetchedData = await fetch('http://localhost:5000/updates');
+      const data = await fetchedData.json();
+    setItems(data);
+
+    }
+    updatesData();
+      }, []);
 
   // Function to convert various image links to direct URLs
   const getDirectImageUrl = (url) => {
