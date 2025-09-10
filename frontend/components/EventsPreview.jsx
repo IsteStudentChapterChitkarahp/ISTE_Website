@@ -16,7 +16,7 @@ const EventsPreview = () => {
                     event.status?.toLowerCase() === 'upcoming'
                 ).slice(0, 2);
                 setEvents(completedEvents);
-                console.log(completedEvents);
+                // console.log(completedEvents);
                 setLoading(false);
             })
             .catch(error => {

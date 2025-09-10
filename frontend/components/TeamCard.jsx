@@ -67,7 +67,6 @@ const TeamCard = ({ teamDetails }) => {
   const roleStyles = getRoleStyles(role);
   const IconComponent = roleStyles.icon;
 
-  // Member card layout
   if (!role || role.toLowerCase() === "member") {
     return (
       <div className="w-full max-w-sm bg-gray-900/50 rounded-2xl p-6 border border-gray-700 hover:border-blue-500/50 transition-all duration-300">
@@ -105,11 +104,9 @@ const TeamCard = ({ teamDetails }) => {
     );
   }
 
-  // Faculty/Executive styled card
   return (
     <div className="group relative w-full max-w-sm">
       <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 hover:border-blue-500/50 transition-all duration-300">
-        {/* Profile */}
         <div className="flex justify-center mb-6">
           <img
             src={photoUrl}
@@ -122,7 +119,6 @@ const TeamCard = ({ teamDetails }) => {
           {fullName}
         </h3>
 
-        {/* Role badge */}
         <div className="flex justify-center mb-4">
           <div
             className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${roleStyles.bg} text-white`}
@@ -132,7 +128,6 @@ const TeamCard = ({ teamDetails }) => {
           </div>
         </div>
 
-        {/* Optional description */}
         {description && (
           <p className="text-gray-300 text-sm leading-relaxed text-center mb-4">
             {description}

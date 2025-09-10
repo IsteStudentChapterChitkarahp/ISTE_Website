@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: "https://www.aquasafemine.com/wp-content/uploads/2018/06/dummy-man-570x570.png",
+    default: "https://www.aquasafemine.com/wp-content/uploads/2018/06/dummy-man-570x570.png",
         validate(value){
             if(!validator.isURL(value)){
                 throw new Error("Invalid Photo URL: " + value);

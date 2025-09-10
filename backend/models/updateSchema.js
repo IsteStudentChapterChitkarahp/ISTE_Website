@@ -11,7 +11,7 @@ const updateSchema = new mongoose.Schema({
     },
     link: {
         type: String,
-        // default: "https://play-lh.googleusercontent.com/PhgyB8JGhS6Dl4WI4z6R2nEBUlWoLV7Yk-VHhLiEI5XAfRWmXu5Y2TogfRd8UxC9oPA",
+
         validate(value){
             if(!validator.isURL(value)){
                 throw new Error("Invalid Photo URL: " + value);

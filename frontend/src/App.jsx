@@ -17,7 +17,6 @@ import { UserProvider } from '../utils/UserContext'
 import EventImagesForm from '../components/ImageGalleryUpdate'
 import AddMemberForm from '../components/AddMembers'
 
-// Home page component
 const HomePage = () => {  
   return (
     <>
@@ -35,20 +34,15 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <Navbar />
 
-        {/* Main content */}
         <div className="flex-grow">
-         {/* <Suspense fallback={<Shimmer />}> */}
           <Routes>
-            {/* Home page */}
             <Route path="/" element={<HomePage />} />
 
-            {/* Other pages */}
             <Route path="/events" element={<Events />} />
             <Route path="/team" element={<Team />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
 
-            {/* Admin routes */}
             
              <>
              <Route path="/admin/update" element={<ProtectedRoute component={<ChangeUpdate />} />} />
@@ -58,13 +52,10 @@ function App() {
             <Route path="/admin/addMembers" element={<ProtectedRoute component={<AddMemberForm />} />} />
             </>
 
-            {/* Fallback */}
             <Route path="*" element={<HomePage />} />
           </Routes>
-           {/* </Suspense> */}
         </div>
 
-        {/* Footer always visible */}
         <Footer />
       </div>
     </UserProvider>

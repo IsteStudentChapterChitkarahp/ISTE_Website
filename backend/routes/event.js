@@ -17,7 +17,7 @@ photoUrl: zod.string().url()
 router.get("/event/images",async(req,res)=>{
   try{
         const images = await ImageGallery.find().populate("createdBy", "firstName username role");
-        console.log(images);
+  // console.log(images);
         res.status(200).json(images);
     } catch(err){
         res.status(404).json({message: "Error fetching images...."})
@@ -41,7 +41,7 @@ data.createdBy = req.user._id;
 
     await User.populate("createdBy", "firstName username role");
 
-    console.log(images);
+  // console.log(images);
         res.status(201).json({ message: "Images added successfully", images });
     } catch(err){
                 res.status(500).json({ message: "Server error" });
@@ -73,7 +73,7 @@ router.get("/me", auth, async (req, res) => {
 router.get("/events",async(req,res)=>{
     try{
         const eventsData = await Event.find().populate("createdBy", "firstName username role");
-        console.log(eventsData);
+  // console.log(eventsData);
         res.status(200).json(eventsData);
     } catch(err){
         res.status(404).json({message: "Error fetching events...."})
@@ -98,7 +98,7 @@ data.createdBy = req.user._id;
 
     await event.populate("createdBy", "firstName username role");
 
-    console.log(event);
+  // console.log(event);
         res.status(201).json({ message: "Event created successfully", event });
     } catch(err){
                 res.status(500).json({ message: "Server error" });
@@ -135,7 +135,7 @@ data.createdBy = req.user._id;
 
     await updates.populate("createdBy", "firstName username role");
 
-    console.log(updates);
+  // console.log(updates);
         res.status(201).json({ message: "Event created successfully", updates});
 
     } catch(err){
@@ -146,7 +146,7 @@ data.createdBy = req.user._id;
 router.get("/updates", async(req,res)=>{
     try{
         const updatesData = await Update.find().populate("createdBy", "firstName username role");
-        console.log(updatesData);
+  // console.log(updatesData);
         res.status(200).json(updatesData);
     } catch(err){
         res.status(404).json({message: "Error error while fetching new updates...."})
@@ -158,8 +158,8 @@ const membersSchema = zod.object({
   email: zod.string().email(),
   firstName: zod.string().min(1, "First name is required"),
   lastName: zod.string().optional(),
-  photoUrl: zod.string().url().optional().or(zod.literal("")), // allow empty string
-  phoneNumber: zod.string().min(7, "Invalid phone number"), // keep string, you already validate in Mongoose
+  photoUrl: zod.string().url().optional().or(zod.literal("")),
+  phoneNumber: zod.string().min(7, "Invalid phone number"),
   section: zod.string().min(1, "Section is required"),
   year: zod.string().min(1, "Year is required"),
   studentId: zod.number(),

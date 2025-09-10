@@ -11,16 +11,13 @@ const Team = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  // Extra filters
   const [yearFilter, setYearFilter] = useState("all");
   const [sectionFilter, setSectionFilter] = useState("all");
   const [idFilter, setIdFilter] = useState("");
 
-  // Categorization
   const categorizeMember = (member) => {
     const role = member.role?.toLowerCase() || "";
     const name = member.firstName?.toLowerCase() || "";
@@ -95,11 +92,9 @@ const Team = () => {
       try {
         setLoading(true);
 
-        // Faculty / Executive
         const res1 = await fetch("http://localhost:5000/user/details");
         let userData = await res1.json();
 
-        // Members
         let membersRes = [];
         if (role) {
           const res2 = await fetch("http://localhost:5000/members");
@@ -141,38 +136,31 @@ const Team = () => {
     fetchData();
   }, [role]);
 
-  // Filtering logic
   useEffect(() => {
     let filtered = teamData;
 
-    // Role Filter
     if (roleFilter !== "all") {
       filtered = filtered.filter(
         (member) => categorizeMember(member) === roleFilter
       );
     }
 
-    // Year Filter
     if (yearFilter !== "all") {
       filtered = filtered.filter((member) => member.year === yearFilter);
     }
 
-    // Section Filter
     if (sectionFilter !== "all") {
       filtered = filtered.filter((member) => member.section === sectionFilter);
     }
 
-    // Student ID Filter
     if (idFilter) {
       const idNumber = Number(idFilter);
       if (!isNaN(idNumber)) {
         filtered = filtered.filter((member) => member.studentId === idNumber);
       } else {
-        filtered = []; // invalid number input
       }
     }
 
-    // Search Filter
     if (searchTerm) {
       filtered = filtered.filter(
         (member) =>
@@ -186,7 +174,6 @@ const Team = () => {
     setCurrentPage(1);
   }, [teamData, searchTerm, roleFilter, yearFilter, sectionFilter, idFilter]);
 
-  // Grouping
   const groupedMembers = {
     faculty: filteredTeam.filter(
       (member) => categorizeMember(member) === "faculty"
@@ -199,7 +186,6 @@ const Team = () => {
     ),
   };
 
-  // Pagination function
   const paginateMembers = (members) => {
     if (itemsPerPage === "all") return members;
     const start = (currentPage - 1) * itemsPerPage;
@@ -220,7 +206,6 @@ const Team = () => {
   return (
     <div className="mt-16 min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
             Our{" "}
@@ -239,11 +224,9 @@ const Team = () => {
           </div>
         </div>
 
-        {/* Filters */}
         <div className="mb-12 max-w-6xl mx-auto">
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
             <div className="flex flex-col md:flex-row gap-4 flex-wrap">
-              {/* Search */}
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
                 <input

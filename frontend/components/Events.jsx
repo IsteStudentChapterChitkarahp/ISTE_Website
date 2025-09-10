@@ -15,7 +15,7 @@ const Events = () => {
             .then((res) => {
                 setEvents(res);
                 setFilteredEvents(res);
-                console.log(res);
+                // console.log(res);
                 setLoading(false);
             })
             .catch(error => {

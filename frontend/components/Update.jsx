@@ -4,7 +4,6 @@ const Marquee = () => {
   const [items, setItems] = useState([]);
   const [isHoveringCard, setIsHoveringCard] = useState(false);
 
-  // Sample data for demonstration
   useEffect(() => {
     const updatesData = async() =>{
       const fetchedData = await fetch('http://localhost:5000/updates');
@@ -15,7 +14,6 @@ const Marquee = () => {
     updatesData();
       }, []);
 
-  // Function to convert various image links to direct URLs
   const getDirectImageUrl = (url) => {
     if (!url) return null;
     const cleanUrl = url.trim();
@@ -54,11 +52,9 @@ const Marquee = () => {
         ${isHoveringCard ? "overflow-visible" : "overflow-hidden"} 
       `}
     >
-      {/* Gradient overlays */}
       <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-blue-600 to-transparent z-10 pointer-events-none"></div>
       <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-purple-600 to-transparent z-10 pointer-events-none"></div>
 
-      {/* Top and bottom gradient lines - these will now pause with the marquee */}
       <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 marquee-border ${isHoveringCard ? 'paused' : ''}`}></div>
       <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400 marquee-border ${isHoveringCard ? 'paused' : ''}`}></div>
 
@@ -71,7 +67,6 @@ const Marquee = () => {
               onMouseEnter={() => setIsHoveringCard(true)}
               onMouseLeave={() => setIsHoveringCard(false)}
             >
-              {/* Main image container */}
               <div className="relative overflow-hidden rounded-lg bg-white bg-opacity-10 p-3 backdrop-blur-sm border border-white border-opacity-20 transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:bg-opacity-20 group-hover:shadow-2xl group-hover:shadow-purple-500/25 cursor-pointer">
                 <img
                   src={getDirectImageUrl(item.link)}
@@ -81,7 +76,6 @@ const Marquee = () => {
                 />
               </div>
 
-              {/* Hover card */}
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out scale-75 group-hover:scale-100 pointer-events-none z-50">
                 <div className="relative bg-white bg-opacity-95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white border-opacity-30 p-6 min-w-[300px] max-w-[400px]">
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2">
@@ -121,7 +115,6 @@ const Marquee = () => {
         )}
       </div>
 
-      {/* Enhanced CSS Styles */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
