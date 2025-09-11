@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext({
@@ -16,7 +17,7 @@ export const UserProvider = ({ children }) => {
   ];
 
   useEffect(() => {
-fetch('http://localhost:5000/me', {
+fetch(`${API_URL}/me`, {
   method: 'GET',
   credentials: 'include',
 })

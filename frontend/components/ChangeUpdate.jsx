@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { useState } from "react";
 import { Settings, Link, FileText, CheckCircle, XCircle } from "lucide-react";
 
@@ -11,7 +12,7 @@ const ChangeUpdate = () => {
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/user/updates", {
+  const res = await fetch(`${API_URL}/user/updates`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

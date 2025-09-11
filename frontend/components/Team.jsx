@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import { useContext, useEffect, useState } from "react";
 import { Users, GraduationCap, Crown, Star, Search } from "lucide-react";
 import TeamCard from "./TeamCard";
@@ -92,12 +93,12 @@ const Team = () => {
       try {
         setLoading(true);
 
-        const res1 = await fetch("http://localhost:5000/user/details");
+  const res1 = await fetch(`${API_URL}/user/details`);
         let userData = await res1.json();
 
         let membersRes = [];
         if (role) {
-          const res2 = await fetch("http://localhost:5000/members");
+          const res2 = await fetch(`${API_URL}/members`);
           membersRes = await res2.json();
         }
 

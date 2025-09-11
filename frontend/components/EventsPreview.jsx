@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, ArrowRight } from 'lucide-react';
@@ -8,7 +9,7 @@ const EventsPreview = () => {
     const [loading, setLoading] = useState(true);
     
     useEffect(() => {
-        fetch("http://localhost:5000/events")
+    fetch(`${API_URL}/events`)
             .then(fetchedEvents => fetchedEvents.json())
             .then((res) => {
                 // Filter only completed events and show first 2

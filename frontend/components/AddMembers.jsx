@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { useState } from "react";
 import { User, Mail, Phone, Calendar, Hash, Image, Users } from "lucide-react";
 
@@ -28,7 +29,7 @@ const AddMemberForm = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:5000/addmembers", {
+  const res = await fetch(`${API_URL}/addmembers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

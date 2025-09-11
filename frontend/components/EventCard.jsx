@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../utils/UserContext';
 import { Calendar, Clock, MapPin, User, ExternalLink, Camera } from 'lucide-react';
@@ -32,7 +33,7 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   const fetchEventPhotos = async () => {
     try {
       setLoadingPhotos(true);
-      const response = await fetch('http://localhost:5000/event/images');
+  const response = await fetch(`${API_URL}/event/images`);
       if (response.ok) {
         const allPhotos = await response.json();
 

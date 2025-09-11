@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import { useState } from "react";
 import { Plus, Calendar, MapPin, Clock, User, Link, Image, FileText, CheckCircle, XCircle } from "lucide-react";
 
@@ -26,7 +27,7 @@ const EventForm = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/user/eventManager", {
+  const res = await fetch(`${API_URL}/user/eventManager`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

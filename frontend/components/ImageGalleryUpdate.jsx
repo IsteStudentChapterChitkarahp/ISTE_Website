@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { useState } from 'react';
 import { Upload, Image, Calendar, User, CheckCircle, AlertCircle, X } from 'lucide-react';
 
@@ -67,7 +68,7 @@ const EventImagesForm = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/event/images', {
+  const response = await fetch(`${API_URL}/event/images`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

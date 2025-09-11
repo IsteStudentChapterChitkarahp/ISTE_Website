@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import { useState } from "react";
 import { UserPlus, User, Lock, Mail, Image, FileText, Users, CheckCircle, XCircle } from "lucide-react";
 
@@ -27,7 +28,7 @@ const UpdateTeam = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/user/signup", {
+  const res = await fetch(`${API_URL}/user/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

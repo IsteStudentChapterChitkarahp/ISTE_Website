@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import React, { useEffect, useState } from 'react';
 import EventCard from './EventCard';
 import { Calendar, Filter, Search } from 'lucide-react';
@@ -10,7 +11,7 @@ const Events = () => {
     const [statusFilter, setStatusFilter] = useState('all');
     
     useEffect(() => {
-        fetch("http://localhost:5000/events")
+    fetch(`${API_URL}/events`)
             .then(fetchedEvents => fetchedEvents.json())
             .then((res) => {
                 setEvents(res);

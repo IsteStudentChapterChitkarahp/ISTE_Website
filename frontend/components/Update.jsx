@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import { useEffect, useState } from "react";
 
 const Marquee = () => {
@@ -6,7 +7,7 @@ const Marquee = () => {
 
   useEffect(() => {
     const updatesData = async() =>{
-      const fetchedData = await fetch('http://localhost:5000/updates');
+  const fetchedData = await fetch(`${API_URL}/updates`);
       const data = await fetchedData.json();
     setItems(data);
 

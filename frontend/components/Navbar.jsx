@@ -1,3 +1,4 @@
+import { API_URL } from '../src/api';
 import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -12,7 +13,7 @@ const Navbar = () => {
   useEffect(() => {
     const checkLoggedIn = async () => {
       try {
-        const res = await fetch("http://localhost:5000/me", {
+  const res = await fetch(`${API_URL}/me`, {
           credentials: "include", 
         });
 
@@ -32,7 +33,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:5000/user/logout", {
+  const res = await fetch(`${API_URL}/user/logout`, {
         method: "POST",
         credentials: "include", 
       });
