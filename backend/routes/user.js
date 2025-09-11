@@ -106,10 +106,12 @@ router.post("/user/signin",async(req,res)=>{
             role: user.role,
         },JWT_SECRET, { expiresIn: "1h" });
 
-    res.cookie('token', token, { httpOnly: true, secure: false });
-        res.json({
-            message: "Signin Successfully",
-        });
+   res.cookie("token", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", 
+  sameSite: "none",
+});
+
     } catch(err){
         console.log("error",err);
         res.status(400).json({message: "Error in Sigin"});
