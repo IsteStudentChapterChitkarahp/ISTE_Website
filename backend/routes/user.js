@@ -30,6 +30,7 @@ router.post("/user/logout", async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
+      path: "/",
     });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
