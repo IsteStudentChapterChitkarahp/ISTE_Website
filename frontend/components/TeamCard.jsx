@@ -10,8 +10,11 @@ import {
   Star,
   Code,
   Settings,
-  PenTool
+  PenTool,
+  UserPlus,
+  Share2
 } from "lucide-react";
+
 
 const TeamCard = ({ teamDetails }) => {
   const {
