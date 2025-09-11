@@ -196,7 +196,7 @@ const Navbar = () => {
               onClick={handleLogin}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
-              Login
+              Admin Login
             </button>
           )}
         </div>
