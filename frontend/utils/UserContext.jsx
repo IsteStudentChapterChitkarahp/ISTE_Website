@@ -16,21 +16,26 @@ export const UserProvider = ({ children }) => {
     "Vice-President", "Social Media", "Treasurer", "Faculty"
   ];
 
-  useEffect(() => {
-fetch(`${API_URL}/me`, {
-  method: 'GET',
-  credentials: 'include',
-})
+  const refreshUser = () => {
+    fetch(`${API_URL}/me`, {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then(res => res.json())
       .then(data => {
         setRole(data.role);
         setAuth(validateUsers.includes(data.role));
       })
       .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    refreshUser();
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <UserContext.Provider value={{ auth, role }}>
+    <UserContext.Provider value={{ auth, role, refreshUser }}>
       {children}
     </UserContext.Provider>
   );

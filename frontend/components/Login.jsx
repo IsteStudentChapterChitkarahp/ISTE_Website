@@ -1,5 +1,6 @@
 import { API_URL } from '../src/api';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../utils/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, User, Lock, CheckCircle, XCircle } from "lucide-react";
 
@@ -10,6 +11,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { refreshUser } = useContext(UserContext);
     
    useEffect(() => {
   if (message && message !== "Signin Successfully") {
@@ -39,13 +41,14 @@ const Login = () => {
             const data = await res.json();
             setMessage(data.message);
             
-            // If login successful, trigger page reload and navigation
-            if (data.message === "Signin Successfully") {
-  setMessage("Signin Successfully");
-  setTimeout(() => {
-    navigate("/"); // go to homepage without hitting backend /login
-  }, 1500);
-}
+                        // If login successful, trigger page reload and navigation
+                        if (data.message === "Signin Successfully") {
+                            setMessage("Signin Successfully");
+                            refreshUser();
+                            setTimeout(() => {
+                                navigate("/"); // go to homepage without hitting backend /login
+                            }, 1500);
+                        }
 
         } catch(err) {
             setMessage("Connection failed. Please try again.");

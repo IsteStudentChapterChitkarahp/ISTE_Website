@@ -8,6 +8,9 @@ import {
   Crown,
   GraduationCap,
   Star,
+  Code,
+  Settings,
+  PenTool
 } from "lucide-react";
 
 const TeamCard = ({ teamDetails }) => {
@@ -48,6 +51,51 @@ const TeamCard = ({ teamDetails }) => {
       };
     }
     if (
+      roleStr.includes("content") ||
+      roleStr.includes("writer") ||
+      roleStr.includes("editor") ||
+      roleStr.includes("creative")
+    ) {
+      return {
+        bg: "bg-gradient-to-r from-pink-500 to-rose-600",
+        icon: PenTool,
+      };
+    }
+    if (
+      roleStr.includes("social media") ||
+      roleStr.includes("marketing") ||
+      roleStr.includes("outreach") ||
+      roleStr.includes("publicity")
+    ) {
+      return {
+        bg: "bg-gradient-to-r from-cyan-500 to-blue-600",
+        icon: Share2,
+      };
+    }
+    if (
+      roleStr.includes("membership") ||
+      roleStr.includes("registration") ||
+      roleStr.includes("enrollment")
+    ) {
+      return {
+        bg: "bg-gradient-to-r from-indigo-500 to-purple-600",
+        icon: UserPlus,
+      };
+    }
+    if (
+      roleStr.includes("technical") ||
+      roleStr.includes("tech") ||
+      roleStr.includes("developer") ||
+      roleStr.includes("programmer") ||
+      roleStr.includes("software") ||
+      roleStr.includes("web")
+    ) {
+      return {
+        bg: "bg-gradient-to-r from-purple-500 to-violet-600",
+        icon: Code,
+      };
+    }
+    if (
       roleStr.includes("coordinator") ||
       roleStr.includes("faculty") ||
       roleStr.includes("professor") ||
@@ -60,7 +108,7 @@ const TeamCard = ({ teamDetails }) => {
     }
     return {
       bg: "bg-gradient-to-r from-blue-500 to-indigo-600",
-      icon: Star,
+      icon: Settings,
     };
   };
 
