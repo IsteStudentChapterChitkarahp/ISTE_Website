@@ -33,7 +33,7 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   const fetchEventPhotos = async () => {
     try {
       setLoadingPhotos(true);
-  const response = await fetch(`${API_URL}/event/images`);
+      const response = await fetch(`${API_URL}/event/images`);
       if (response.ok) {
         const allPhotos = await response.json();
 
@@ -87,7 +87,7 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
                     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
                   }
                   alt={name}
-                  className="w-full h-80 lg:h-96 object-cover transition-all duration-700 group-hover:scale-105"
+                  className="w-full h-80 lg:h-96 object-cover object-top transition-all duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-slate-900/30 lg:to-slate-900/60" />
               </div>
@@ -184,7 +184,7 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
               'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
             }
             alt={name}
-            className="w-full h-64 object-cover transition-all duration-700 group-hover:scale-110"
+            className="w-full h-64 object-cover object-top transition-all duration-700 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
         </div>

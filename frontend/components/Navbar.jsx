@@ -1,6 +1,5 @@
 import { API_URL } from '../src/api';
-import { useContext } from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../utils/UserContext";
 
@@ -8,12 +7,13 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogoutMessage, setShowLogoutMessage] = useState(false);
   const navigate = useNavigate(); 
-  const { role } = useContext(UserContext);
+
+  const { role, refreshUser, clearUser } = useContext(UserContext);
 
   useEffect(() => {
     const checkLoggedIn = async () => {
       try {
-  const res = await fetch(`${API_URL}/me`, {
+        const res = await fetch(`${API_URL}/me`, {
           credentials: "include", 
         });
 
@@ -31,56 +31,38 @@ const Navbar = () => {
     checkLoggedIn();
   }, []);
 
- const handleLogout = async () => {
-  try {
-    const res = await fetch(`${API_URL}/user/logout`, {
-      method: "POST",
-      credentials: "include", 
-    });
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(`${API_URL}/user/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
 
-    if (res.ok) {
+      if (res.ok) {
+        // clear frontend context state
+        clearUser();  
+        setIsLoggedIn(false);
 
-      setShowLogoutMessage(true);
-
-      setTimeout(() => {
-        setShowLogoutMessage(false);
-        window.location.href = "/login"; 
-      }, 1200);
-    } else {
-      console.error("Logout failed:", await res.json());
+        setShowLogoutMessage(true);
+        setTimeout(() => {
+          setShowLogoutMessage(false);
+          navigate("/");
+        }, 1200);
+      } else {
+        const errData = await res.json();
+        console.error("Logout failed:", errData);
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
-  } catch (err) {
-    console.error("Logout failed:", err);
-  }
-};
-
-
-
-
-  const handleLogin = () => {
-    navigate("/login"); 
   };
 
-  // Navigation handlers for admin dropdown
-  const handleAddEvents = () => {
-    navigate("/admin/add-event");
-  };
-
-  const handleChangeUpdates = () => {
-    navigate("/admin/update");
-  };
-
-  const handleUpdateTeam = () => {
-    navigate("/admin/update-team");
-  };
-
-  const handleImageGalleryUpdate= () => {
-    navigate("/admin/event/photos")
-  }
-
-  const handleAddMembers= () =>{
-   navigate("/admin/addMembers")
-  }
+  const handleLogin = () => navigate("/login"); 
+  const handleAddEvents = () => navigate("/admin/add-event");
+  const handleChangeUpdates = () => navigate("/admin/update");
+  const handleUpdateTeam = () => navigate("/admin/update-team");
+  const handleImageGalleryUpdate = () => navigate("/admin/event/photos");
+  const handleAddMembers = () => navigate("/admin/addMembers");
 
   return (
     <>
@@ -91,21 +73,26 @@ const Navbar = () => {
                         animate-fade-in-down">
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              <path 
+                fillRule="evenodd" 
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 
+                   01-1.414 0l-4-4a1 1 0 011.414-1.414L8 
+                   12.586l7.293-7.293a1 1 0 011.414 0z" 
+                clipRule="evenodd" 
+              />
             </svg>
             <span className="font-medium">Logged out successfully!</span>
           </div>
         </div>
       )}
 
-      <div 
-        className="navbar fixed top-0 left-0 w-full z-50 h-16 
-                   bg-[url('https://betterstack.com/assets/v2/homepage-v3/hero-bg-sm-a7f682621b3ceceb1a711f30165a0feab8f901cdbb1e0b9b41c1729f848ea0')] 
-                   bg-cover bg-center bg-no-repeat 
-                   bg-base-100/80 backdrop-blur-md shadow-sm">
+      <div className="navbar fixed top-0 left-0 w-full z-50 h-16 
+                      bg-[url('https://betterstack.com/assets/v2/homepage-v3/hero-bg-sm-a7f682621b3ceceb1a711f30165a0feab8f901cdbb1e0b9b41c1729f848ea0')] 
+                      bg-cover bg-center bg-no-repeat 
+                      bg-base-100/80 backdrop-blur-md shadow-sm">
         
         <div className="navbar-start">
-          { role && (
+          {role && (
             <div className="dropdown">
               <div tabIndex={0} role="button" className="btn btn-ghost">
                 <svg
@@ -115,7 +102,12 @@ const Navbar = () => {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="2" 
+                    d="M4 6h16M4 12h8m-8 6h16" 
+                  />
                 </svg>
               </div>
               <ul
@@ -124,12 +116,13 @@ const Navbar = () => {
               >
                 <li><a onClick={handleAddEvents} className="cursor-pointer">Add Events</a></li>
                 <li><a onClick={handleChangeUpdates} className="cursor-pointer">Change Updates</a></li>
-                 <li><a onClick={handleImageGalleryUpdate} className="cursor-pointer">Update Image Gallery</a></li>
+                <li><a onClick={handleImageGalleryUpdate} className="cursor-pointer">Update Image Gallery</a></li>
                 <li><a className="cursor-pointer">Update About Us</a></li>
-                {(role === "Faculty" || role === "Technical Head" || role==="Membership Chair") && (
+
+                {(role === "Faculty" || role === "Technical Head" || role === "Membership Chair") && (
                   <>
-                  <li><a onClick={handleUpdateTeam} className="cursor-pointer">Update Team</a></li>
-                  <li><a onClick={handleAddMembers} className="cursor-pointer">Add Members</a></li>
+                    <li><a onClick={handleUpdateTeam} className="cursor-pointer">Update Team</a></li>
+                    <li><a onClick={handleAddMembers} className="cursor-pointer">Add Members</a></li>
                   </>
                 )}
               </ul>
@@ -187,14 +180,18 @@ const Navbar = () => {
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                         text-white font-medium py-2 px-6 rounded-full shadow-md 
+                         hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               Logout
             </button>
           ) : (
             <button
               onClick={handleLogin}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-6 rounded-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                         text-white font-medium py-2 px-6 rounded-full shadow-md 
+                         hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               Admin Login
             </button>
