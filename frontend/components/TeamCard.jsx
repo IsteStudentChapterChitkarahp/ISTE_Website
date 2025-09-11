@@ -9,12 +9,11 @@ import {
   GraduationCap,
   Star,
   Code,
-  Settings,
-  PenTool,
+  Share2,
+  DollarSign,
   UserPlus,
-  Share2
+  Settings,
 } from "lucide-react";
-
 
 const TeamCard = ({ teamDetails }) => {
   const {
@@ -43,10 +42,15 @@ const TeamCard = ({ teamDetails }) => {
         icon: Crown,
       };
     }
+    if (roleStr.includes("treasurer")) {
+      return {
+        bg: "bg-gradient-to-r from-green-500 to-emerald-600",
+        icon: DollarSign,
+      };
+    }
     if (
       roleStr.includes("vice") ||
-      roleStr.includes("secretary") ||
-      roleStr.includes("treasurer")
+      roleStr.includes("secretary")
     ) {
       return {
         bg: "bg-gradient-to-r from-orange-500 to-red-600",

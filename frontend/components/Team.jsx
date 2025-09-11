@@ -35,7 +35,7 @@ const Team = () => {
       "content team",
       "social media team",
       "event coordinator",
-      "membership cordinator",
+      "membership chair",
     ];
     if (executiveRoles.some((execRole) => role.includes(execRole))) {
       return "executive";

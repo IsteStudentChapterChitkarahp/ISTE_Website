@@ -46,7 +46,7 @@ const Login = () => {
                             setMessage("Signin Successfully");
                             refreshUser();
                             setTimeout(() => {
-                                navigate("/"); // go to homepage without hitting backend /login
+                                window.location.href = "/"; // go to homepage without hitting backend /login
                             }, 1500);
                         }
 
