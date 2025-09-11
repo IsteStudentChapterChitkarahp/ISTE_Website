@@ -111,6 +111,11 @@ router.post("/user/signin",async(req,res)=>{
   secure: process.env.NODE_ENV === "production", 
   sameSite: "none",
 });
+  res.status(200).json({ message: "Signin Successfully", user: {
+    username: user.username,
+    firstName: user.firstName,
+    role: user.role
+}});
 
     } catch(err){
         console.log("error",err);
