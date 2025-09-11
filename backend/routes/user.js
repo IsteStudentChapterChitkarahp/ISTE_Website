@@ -25,13 +25,18 @@ router.get("/user/details", async (req, res) => {
 });
 
 router.post("/user/logout", async (req, res) => {
-  try{
-    res.clearCookie("token");
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    });
     res.status(200).json({ message: "Logged out successfully" });
-  } catch(err){
-    res.status(500).json({message: "Logout Failed!"});
+  } catch (err) {
+    res.status(500).json({ message: "Logout Failed!" });
   }
 });
+
 
 router.post("/user/signup", async(req,res)=>{
     try{
