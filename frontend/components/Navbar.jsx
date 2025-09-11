@@ -32,31 +32,18 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
-    try {
-  const res = await fetch(`${API_URL}/user/logout`, {
-        method: "POST",
-        credentials: "include", 
-      });
-      
-      if (!res.ok) {
-        return;
-      }
-      
-      setIsLoggedIn(false);
-      
-      // Show logout success message
-      setShowLogoutMessage(true);
-      
-      // Hide message after 3 seconds and refresh
-      setTimeout(() => {
-        setShowLogoutMessage(false);
-        window.location.reload();
-      }, 3000);
-      
-    } catch (err) {
-      console.error("Logout failed", err);
-    }
-  };
+  try {
+    await fetch(`${API_URL}/user/logout`, {
+      method: "POST",
+      credentials: "include", // required so cookies are sent
+    });
+    navigate("/login");
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
+
+
 
   const handleLogin = () => {
     navigate("/login"); 
