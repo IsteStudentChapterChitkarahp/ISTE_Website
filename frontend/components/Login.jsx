@@ -11,23 +11,13 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (message === "Signin Successfully") {
-                // Reload the page first to update any auth context
-                window.location.reload();
-                // Then navigate to homepage
-                setTimeout(() => {
-                    navigate("/");
-                }, 100);
-            } else if (message) {
-                // Clear other messages after 3 seconds
-                setMessage("");
-            }
-        }, 2000); 
-        
-        return () => clearTimeout(timer);
-    }, [message, navigate]);
+   useEffect(() => {
+  if (message && message !== "Signin Successfully") {
+    const timer = setTimeout(() => setMessage(""), 2000);
+    return () => clearTimeout(timer);
+  }
+}, [message]);
+
 
     const handleLogin = async() => {
         if (!username.trim() || !password.trim()) {
@@ -51,11 +41,12 @@ const Login = () => {
             
             // If login successful, trigger page reload and navigation
             if (data.message === "Signin Successfully") {
-                // Small delay to show success message
-                setTimeout(() => {
-                    window.location.href = "/"; // This will reload and navigate
-                }, 1500);
-            }
+  setMessage("Signin Successfully");
+  setTimeout(() => {
+    navigate("/"); // go to homepage without hitting backend /login
+  }, 1500);
+}
+
         } catch(err) {
             setMessage("Connection failed. Please try again.");
         } finally {
