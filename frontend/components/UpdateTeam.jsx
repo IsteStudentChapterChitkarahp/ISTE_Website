@@ -176,6 +176,8 @@ const UpdateTeam = () => {
               >
                 <option value="" className="bg-gray-800 text-gray-100">Select Role</option>
                 <option value="Faculty" className="bg-gray-800 text-gray-100">Faculty</option>
+                <option value="Event Coordinator" className="bg-gray-800 text-gray-100">President</option>
+                <option value="Event Coordinator" className="bg-gray-800 text-gray-100">Vice-President</option>
                 <option value="Event Coordinator" className="bg-gray-800 text-gray-100">Event Coordinator</option>
                 <option value="Technical Head" className="bg-gray-800 text-gray-100">Technical Head</option>
                 <option value="General Secretary" className="bg-gray-800 text-gray-100">General Secretary</option>
