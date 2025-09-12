@@ -30,6 +30,46 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   const words = description?.split(" ") || [];
   const truncatedDescription = words.slice(0, 20).join(" ") + (words.length > 20 ? "..." : "");
 
+  // ✅ Status badge configuration
+  const getStatusBadgeConfig = (status) => {
+    const statusLower = status?.toLowerCase() || '';
+    
+    switch (statusLower) {
+      case 'completed':
+        return {
+          text: 'Completed',
+          bg: 'bg-green-500',
+          glow: 'shadow-green-500/30'
+        };
+      case 'upcoming':
+        return {
+          text: 'Upcoming',
+          bg: 'bg-blue-500',
+          glow: 'shadow-blue-500/30'
+        };
+      case 'active':
+        return {
+          text: 'Active',
+          bg: 'bg-orange-500',
+          glow: 'shadow-orange-500/30'
+        };
+      case 'cancelled':
+        return {
+          text: 'Cancelled',
+          bg: 'bg-red-500',
+          glow: 'shadow-red-500/30'
+        };
+      default:
+        return {
+          text: 'Event',
+          bg: 'bg-gray-500',
+          glow: 'shadow-gray-500/30'
+        };
+    }
+  };
+
+  const badgeConfig = getStatusBadgeConfig(status);
+
   const fetchEventPhotos = async () => {
     try {
       setLoadingPhotos(true);
@@ -81,6 +121,13 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
             <div className="flex flex-col lg:flex-row items-stretch">
               {/* Image Side */}
               <div className="lg:w-5/12 relative overflow-hidden">
+                {/* Status Badge */}
+                <div className="absolute top-4 left-4 z-10">
+                  <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold text-white ${badgeConfig.bg} shadow-lg ${badgeConfig.glow} backdrop-blur-sm border border-white/20`}>
+                    {badgeConfig.text}
+                  </span>
+                </div>
+                
                 <img
                   src={
                     photoUrl ||
@@ -178,6 +225,13 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
       {/* Vertical Card */}
       <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-slate-700/50 hover:border-slate-600/70 max-w-sm">
         <div className="relative overflow-hidden">
+          {/* Status Badge */}
+          <div className="absolute top-3 left-3 z-10">
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white ${badgeConfig.bg} shadow-lg ${badgeConfig.glow} backdrop-blur-sm border border-white/20`}>
+              {badgeConfig.text}
+            </span>
+          </div>
+          
           <img
             src={
               photoUrl ||

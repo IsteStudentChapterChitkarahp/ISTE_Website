@@ -17,7 +17,7 @@ const Team = () => {
 
   const [yearFilter, setYearFilter] = useState("all");
   const [sectionFilter, setSectionFilter] = useState("all");
-  const [idFilter, setIdFilter] = useState("");
+  const [idFilter, setIdFilter] =("");
 
   const categorizeMember = (member) => {
     const role = member.role?.toLowerCase() || "";
@@ -88,12 +88,27 @@ const Team = () => {
     }
   };
 
+  // Function to get appropriate grid classes based on number of items
+  const getGridClasses = (itemCount, category) => {
+    const baseClasses = "grid gap-8 justify-items-center";
+    
+    if (category === "faculty") {
+      // For faculty, use flex layout to center when few items
+      if (itemCount <= 3) {
+        return "flex flex-wrap justify-center gap-8";
+      }
+    }
+    
+    // Default grid layout for other categories or when many items
+    return `${baseClasses} grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-  const res1 = await fetch(`${API_URL}/user/details`);
+        const res1 = await fetch(`${API_URL}/user/details`);
         let userData = await res1.json();
 
         let membersRes = [];
@@ -158,7 +173,6 @@ const Team = () => {
       const idNumber = Number(idFilter);
       if (!isNaN(idNumber)) {
         filtered = filtered.filter((member) => member.studentId === idNumber);
-      } else {
       }
     }
 
@@ -308,7 +322,7 @@ const Team = () => {
                       <div className={`w-32 h-1 bg-gradient-to-r ${getCategoryGradient(category)} mx-auto rounded-full`}></div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+                    <div className={getGridClasses(displayedMembers.length, category)}>
                       {displayedMembers.map((member) => (
                         <TeamCard key={member._id} teamDetails={member} />
                       ))}
