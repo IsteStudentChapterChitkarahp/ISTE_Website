@@ -116,6 +116,7 @@ router.post("/user/signin",async(req,res)=>{
   httpOnly: true,
   secure: process.env.NODE_ENV === "production", 
   sameSite: "none",
+  path: "/", 
 // secure: false, 
 //   sameSite: "lax",
 });
