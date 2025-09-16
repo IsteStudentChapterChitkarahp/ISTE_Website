@@ -112,13 +112,13 @@ router.post("/user/signin",async(req,res)=>{
             role: user.role,
         },JWT_SECRET, { expiresIn: "1h" });
 
-   res.cookie("token", token, {
+   const isProd = process.env.NODE_ENV === "production";
+
+res.cookie("token", token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", 
-  sameSite: "none",
-  path: "/", 
-// secure: false, 
-//   sameSite: "lax",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+  path: "/",
 });
   res.status(200).json({ message: "Signin Successfully", user: {
     username: user.username,
