@@ -9,7 +9,8 @@ const app = express();
 app.use(express.json());
 const allowedOrigins = [
   process.env.FRONTEND_URL_VERCEL,
-  process.env.FRONTEND_URL
+  process.env.FRONTEND_URL,
+  'http://localhost:5173'
 ];
 
 app.use(cors({

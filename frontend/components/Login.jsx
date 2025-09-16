@@ -37,16 +37,15 @@ const Login = () => {
                 credentials: "include",
                 body: JSON.stringify({username, password})
             });
-
             const data = await res.json();
+            console.log(data);
             setMessage(data.message);
             
-                        // If login successful, trigger page reload and navigation
                         if (data.message === "Signin Successfully") {
                             setMessage("Signin Successfully");
                             refreshUser();
                             setTimeout(() => {
-                                window.location.href = "/"; // go to homepage without hitting backend /login
+                                window.location.href = "/"; 
                             }, 1500);
                         }
 
