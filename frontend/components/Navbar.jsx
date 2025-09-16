@@ -14,22 +14,28 @@ const Navbar = () => {
     const checkLoggedIn = async () => {
       try {
         const res = await fetch(`${API_URL}/me`, {
-          credentials: "include", 
+          method: "GET",
+          credentials: "include", // must include for cookies
         });
 
         if (res.ok) {
           setIsLoggedIn(true);
+          const data = await res.json();
+          refreshUser(data); // update UserContext
         } else {
           setIsLoggedIn(false);
+          clearUser();
         }
       } catch (err) {
-        console.error("Invalid User", err);
+        console.error("Error checking login:", err);
         setIsLoggedIn(false);
+        clearUser();
       }
     };
 
     checkLoggedIn();
-  }, []);
+  }, [refreshUser, clearUser]);
+
 
   const handleLogout = async () => {
     try {
