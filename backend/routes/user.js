@@ -117,14 +117,14 @@ router.post("/user/signin",async(req,res)=>{
 res.cookie("token", token, {
   httpOnly: true,
   secure: isProd,
-//   sameSite: isProd ? "none" : "lax",
-sameSite: "lax",
+  sameSite: isProd ? "none" : "lax",
   path: "/",
 });
   res.status(200).json({ message: "Signin Successfully", user: {
     username: user.username,
     firstName: user.firstName,
-    role: user.role
+    role: user.role,
+    token: token
 }});
 
     } catch(err){
