@@ -30,48 +30,21 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   const words = description?.split(" ") || [];
   const truncatedDescription = words.slice(0, 20).join(" ") + (words.length > 20 ? "..." : "");
 
-  // ✅ Function to check if event is live
-  const isEventLive = () => {
-    if (!eventDate || !time) return false;
-    
-    const now = new Date();
-    const eventDateTime = new Date(eventDate);
-    
-    // Parse time string (assuming format like "10:00 AM" or "14:30")
-    const timeMatch = time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
-    if (!timeMatch) return false;
-    
-    let hours = parseInt(timeMatch[1]);
-    const minutes = parseInt(timeMatch[2]);
-    const ampm = timeMatch[3];
-    
-    // Convert to 24-hour format if AM/PM is present
-    if (ampm) {
-      if (ampm.toUpperCase() === 'PM' && hours !== 12) hours += 12;
-      if (ampm.toUpperCase() === 'AM' && hours === 12) hours = 0;
-    }
-    
-    eventDateTime.setHours(hours, minutes, 0, 0);
-    
-    // Event is live if it's today and within 3 hours of start time
-    const eventEndTime = new Date(eventDateTime.getTime() + (3 * 60 * 60 * 1000)); // 3 hours after start
-    
-    return now >= eventDateTime && now <= eventEndTime;
-  };
-
-  // ✅ Determine badge type and styling
+  // ✅ Determine badge type and styling - manual control only
   const getBadgeInfo = () => {
-    if (isEventLive()) {
+    if (status?.toLowerCase() === 'live') {
       return {
         show: true,
         text: 'Live',
-        className: 'bg-red-500/80 backdrop-blur-md border border-red-300/40 shadow-lg shadow-red-500/50 text-white animate-pulse'
+        className: 'bg-red-500/30 backdrop-blur-md border border-red-400/50 text-red-100 font-bold relative overflow-hidden',
+        flowingLineColor: 'bg-gradient-to-r from-transparent via-red-300/80 to-transparent'
       };
     } else if (status?.toLowerCase() === 'upcoming') {
       return {
         show: true,
         text: 'Upcoming',
-        className: 'bg-green-500/80 backdrop-blur-md border border-green-300/40 shadow-lg shadow-green-500/50 text-white'
+        className: 'bg-green-500/30 backdrop-blur-md border border-green-400/50 text-green-100 font-bold relative overflow-hidden',
+        flowingLineColor: 'bg-gradient-to-r from-transparent via-green-300/80 to-transparent'
       };
     }
     return { show: false };
@@ -121,6 +94,40 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
     setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
   };
 
+  // ✅ Cool Badge Component with flowing line animation
+  const CoolBadge = ({ badgeInfo }) => (
+    <div className="absolute top-4 left-4 z-10">
+      <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm ${badgeInfo.className}`}>
+        {/* Flowing line animation */}
+        <div className={`absolute inset-0 ${badgeInfo.flowingLineColor} h-full w-2 animate-pulse`} 
+             style={{
+               animation: 'flowingLine 2s linear infinite',
+               transform: 'translateX(-100%)'
+             }}></div>
+        
+        {/* Badge text */}
+        <span className="relative z-10">{badgeInfo.text}</span>
+        
+        {/* CSS for custom animation */}
+        <style jsx>{`
+          @keyframes flowingLine {
+            0% {
+              transform: translateX(-100%);
+              opacity: 0;
+            }
+            50% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateX(400%);
+              opacity: 0;
+            }
+          }
+        `}</style>
+      </span>
+    </div>
+  );
+
   if (isPreview) {
     return (
       <>
@@ -130,14 +137,8 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
             <div className="flex flex-col lg:flex-row items-stretch">
               {/* Image Side */}
               <div className="lg:w-5/12 relative overflow-hidden">
-                {/* Status Badge */}
-                {badgeInfo.show && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${badgeInfo.className}`}>
-                      {badgeInfo.text}
-                    </span>
-                  </div>
-                )}
+                {/* Cool Status Badge */}
+                {badgeInfo.show && <CoolBadge badgeInfo={badgeInfo} />}
                 
                 <img
                   src={
@@ -236,14 +237,8 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
       {/* Vertical Card with Original Design */}
       <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-slate-700/50 hover:border-slate-600/70 max-w-sm">
         <div className="relative overflow-hidden">
-          {/* Status Badge */}
-          {badgeInfo.show && (
-            <div className="absolute top-3 left-3 z-10">
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${badgeInfo.className}`}>
-                {badgeInfo.text}
-              </span>
-            </div>
-          )}
+          {/* Cool Status Badge */}
+          {badgeInfo.show && <CoolBadge badgeInfo={badgeInfo} />}
           
           <img
             src={
