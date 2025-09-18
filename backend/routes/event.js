@@ -70,15 +70,18 @@ router.get("/me", auth, async (req, res) => {
   res.json(user);
 });
 
-router.get("/events",async(req,res)=>{
-    try{
-        const eventsData = await Event.find().populate("createdBy", "firstName username role");
-  // console.log(eventsData);
+router.get("/events", async(req, res) => {
+    try {
+        const eventsData = await Event.find()
+            .populate("createdBy", "firstName username role")
+            .sort({ createdAt: -1 }); // Sort by creation date, newest first
+        
         res.status(200).json(eventsData);
-    } catch(err){
-        res.status(404).json({message: "Error fetching events...."})
+    } catch(err) {
+        res.status(404).json({message: "Error fetching events...."});
     }
-})
+});
+
 
 router.post("/user/eventManager",auth, async (req,res)=>{
     try{

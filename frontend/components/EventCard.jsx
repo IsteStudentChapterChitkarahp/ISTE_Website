@@ -30,45 +30,54 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   const words = description?.split(" ") || [];
   const truncatedDescription = words.slice(0, 20).join(" ") + (words.length > 20 ? "..." : "");
 
-  // ✅ Status badge configuration
-  const getStatusBadgeConfig = (status) => {
-    const statusLower = status?.toLowerCase() || '';
+  // ✅ Function to check if event is live
+  const isEventLive = () => {
+    if (!eventDate || !time) return false;
     
-    switch (statusLower) {
-      case 'completed':
-        return {
-          text: 'Completed',
-          bg: 'bg-green-500',
-          glow: 'shadow-green-500/30'
-        };
-      case 'upcoming':
-        return {
-          text: 'Upcoming',
-          bg: 'bg-blue-500',
-          glow: 'shadow-blue-500/30'
-        };
-      case 'active':
-        return {
-          text: 'Active',
-          bg: 'bg-orange-500',
-          glow: 'shadow-orange-500/30'
-        };
-      case 'cancelled':
-        return {
-          text: 'Cancelled',
-          bg: 'bg-red-500',
-          glow: 'shadow-red-500/30'
-        };
-      default:
-        return {
-          text: 'Event',
-          bg: 'bg-gray-500',
-          glow: 'shadow-gray-500/30'
-        };
+    const now = new Date();
+    const eventDateTime = new Date(eventDate);
+    
+    // Parse time string (assuming format like "10:00 AM" or "14:30")
+    const timeMatch = time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (!timeMatch) return false;
+    
+    let hours = parseInt(timeMatch[1]);
+    const minutes = parseInt(timeMatch[2]);
+    const ampm = timeMatch[3];
+    
+    // Convert to 24-hour format if AM/PM is present
+    if (ampm) {
+      if (ampm.toUpperCase() === 'PM' && hours !== 12) hours += 12;
+      if (ampm.toUpperCase() === 'AM' && hours === 12) hours = 0;
     }
+    
+    eventDateTime.setHours(hours, minutes, 0, 0);
+    
+    // Event is live if it's today and within 3 hours of start time
+    const eventEndTime = new Date(eventDateTime.getTime() + (3 * 60 * 60 * 1000)); // 3 hours after start
+    
+    return now >= eventDateTime && now <= eventEndTime;
   };
 
-  const badgeConfig = getStatusBadgeConfig(status);
+  // ✅ Determine badge type and styling
+  const getBadgeInfo = () => {
+    if (isEventLive()) {
+      return {
+        show: true,
+        text: 'Live',
+        className: 'bg-red-500/80 backdrop-blur-md border border-red-300/40 shadow-lg shadow-red-500/50 text-white animate-pulse'
+      };
+    } else if (status?.toLowerCase() === 'upcoming') {
+      return {
+        show: true,
+        text: 'Upcoming',
+        className: 'bg-green-500/80 backdrop-blur-md border border-green-300/40 shadow-lg shadow-green-500/50 text-white'
+      };
+    }
+    return { show: false };
+  };
+
+  const badgeInfo = getBadgeInfo();
 
   const fetchEventPhotos = async () => {
     try {
@@ -115,18 +124,20 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
   if (isPreview) {
     return (
       <>
-        {/* Preview Card */}
+        {/* Preview Card with Green Theme and Transparency */}
         <div className="group relative w-full max-w-6xl mx-auto">
           <div className="bg-slate-800/60 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 border border-slate-700/50 hover:border-slate-600/70">
             <div className="flex flex-col lg:flex-row items-stretch">
               {/* Image Side */}
               <div className="lg:w-5/12 relative overflow-hidden">
                 {/* Status Badge */}
-                <div className="absolute top-4 left-4 z-10">
-                  <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold text-white ${badgeConfig.bg} shadow-lg ${badgeConfig.glow} backdrop-blur-sm border border-white/20`}>
-                    {badgeConfig.text}
-                  </span>
-                </div>
+                {badgeInfo.show && (
+                  <div className="absolute top-4 left-4 z-10">
+                    <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${badgeInfo.className}`}>
+                      {badgeInfo.text}
+                    </span>
+                  </div>
+                )}
                 
                 <img
                   src={
@@ -222,15 +233,17 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
 
   return (
     <>
-      {/* Vertical Card */}
+      {/* Vertical Card with Original Design */}
       <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-slate-700/50 hover:border-slate-600/70 max-w-sm">
         <div className="relative overflow-hidden">
           {/* Status Badge */}
-          <div className="absolute top-3 left-3 z-10">
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white ${badgeConfig.bg} shadow-lg ${badgeConfig.glow} backdrop-blur-sm border border-white/20`}>
-              {badgeConfig.text}
-            </span>
-          </div>
+          {badgeInfo.show && (
+            <div className="absolute top-3 left-3 z-10">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${badgeInfo.className}`}>
+                {badgeInfo.text}
+              </span>
+            </div>
+          )}
           
           <img
             src={
@@ -302,7 +315,7 @@ const EventCard = ({ eventDetails, isPreview = false }) => {
             </button>
           </div>
 
-          {auth && createdBy && (
+          {createdBy && (
             <div className="pt-4 mt-4 border-t border-slate-700/50">
               <div className="flex items-center text-xs text-slate-400">
                 <User className="w-3 h-3 mr-2" />
