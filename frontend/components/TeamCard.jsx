@@ -13,6 +13,7 @@ import {
   DollarSign,
   UserPlus,
   Settings,
+  PenTool
 } from "lucide-react";
 
 const TeamCard = ({ teamDetails }) => {
