@@ -123,7 +123,8 @@ res.cookie("token", token, {
   res.status(200).json({ message: "Signin Successfully", user: {
     username: user.username,
     firstName: user.firstName,
-    role: user.role
+    role: user.role,
+    token: token
 }});
 
     } catch(err){

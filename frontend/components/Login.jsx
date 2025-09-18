@@ -42,6 +42,7 @@ const Login = () => {
             setMessage(data.message);
             
                         if (data.message === "Signin Successfully") {
+                            localStorage.setItem("testing", JSON.stringify(data))
                             setMessage("Signin Successfully");
                             refreshUser();
                             setTimeout(() => {
